@@ -13,11 +13,10 @@ namespace Project1
     {
         private new Game1 Game => (Game1)base.Game;
         private World world;
-        private GuiSystem guiSystem;
-
-        private Button testButton;
+        private World uiContainer;
 
         private Entity player;
+        private Entity button;
 
         private QuadTree ChunkRenderer;
 
@@ -32,7 +31,12 @@ namespace Project1
                 .AddSystem(new PlayerInputHandler())                
                 .Build();
 
+            uiContainer = new WorldBuilder()
+                .AddSystem(new ComponentRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT))
+                .Build();
+
             Game.Components.Add(world);
+            Game.Components.Add(uiContainer);
 
             player = world.CreateEntity();
             player.Attach(new Transform2(Game.VIRTUAL_CENTER));
@@ -40,11 +44,8 @@ namespace Project1
             player.Attach(new Velocity());
             player.Attach(new Player());
 
-            guiSystem = new GuiSystem(Game);
-            testButton = new Button(new Transform2(0, 0));
-
-            guiSystem.AddElement(testButton);
-            guiSystem.InitializeElements();
+            button = uiContainer.CreateEntity();
+            button.Attach(new Transform2(Vector2.Zero));
 
             ChunkRenderer = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 2048);
         }
@@ -54,9 +55,9 @@ namespace Project1
         public override void LoadContent()
         {
             base.LoadContent();
-            guiSystem.LoadContentOfElements();
 
             player.Attach(new Sprite(Content.Load<Texture2D>("TestPNG64x64")));
+            button.Attach(new Sprite(Content.Load<Texture2D>("TestPNG64x64")));
         }
 
         public override void Update(GameTime gameTime)
@@ -69,14 +70,18 @@ namespace Project1
         {
             GraphicsDevice.Clear(Color.DarkBlue);
             world.Draw(gameTime);
-            guiSystem.DrawElements();
+            uiContainer.Draw(gameTime);
         }
 
         public override void UnloadContent()
         {
             base.UnloadContent();
+
             world.Dispose();
+            uiContainer.Dispose();
+
             Game.Components.Remove(world);
+            Game.Components.Remove(uiContainer);
         }
     }
 }
