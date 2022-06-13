@@ -79,7 +79,7 @@ namespace Project1
 
         public override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkBlue);
+            GraphicsDevice.Clear(Color.Black);
             world.Draw(gameTime);
             uiContainer.Draw(gameTime);
         }

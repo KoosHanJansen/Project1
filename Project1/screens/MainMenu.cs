@@ -15,7 +15,7 @@ namespace Project1
         private World world;
         private World uiContainer;
 
-        private Entity button;
+        private Entity playBtn;
 
         public override void Initialize()
         {
@@ -27,13 +27,18 @@ namespace Project1
 
             uiContainer = new WorldBuilder()
                 .AddSystem(new ComponentRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT))
+                .AddSystem(new UIInputHandler(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT))
                 .Build();
 
             Game.Components.Add(world);
             Game.Components.Add(uiContainer);
 
-            button = uiContainer.CreateEntity();
-            button.Attach(new Transform2(new Vector2(100,100)));
+            Button playButton = new Button();
+            playButton.ButtonPress += OnPlayButtonPressed;
+
+            playBtn = uiContainer.CreateEntity();
+            playBtn.Attach(new Transform2(Game.VIRTUAL_CENTER));
+            playBtn.Attach(playButton);
         }
 
         public MainMenu(Game1 game) : base(game) { }
@@ -41,23 +46,23 @@ namespace Project1
         public override void LoadContent()
         {
             base.LoadContent();
-            button.Attach(new Sprite(Content.Load<Texture2D>("TestPNG64x64")));
+            playBtn.Attach(new Sprite(Content.Load<Texture2D>("StartGame")));
+        }
+
+        public void OnPlayButtonPressed(object e, EventArgs args)
+        {
+            MyGame actualGamePoggers = new MyGame(Game);
+            Game.ChangeScreen(ref actualGamePoggers);
         }
 
         public override void Update(GameTime gameTime)
         {
             world.Update(gameTime);
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-            {
-                MyGame actualGamePoggers = new MyGame(Game);
-                Game.ChangeScreen(ref actualGamePoggers);
-            }
         }
 
         public override void Draw(GameTime gameTime)
         {
-            Game.GraphicsDevice.Clear(Color.CornflowerBlue);
+            Game.GraphicsDevice.Clear(Color.Black);
             world.Draw(gameTime);
             uiContainer.Draw(gameTime);
         }
