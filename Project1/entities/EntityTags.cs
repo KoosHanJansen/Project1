@@ -3,4 +3,8 @@
     class Player
     {
     }
+
+    class Button
+    {
+    }
 }

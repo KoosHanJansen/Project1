@@ -33,6 +33,7 @@ namespace Project1
 
             uiContainer = new WorldBuilder()
                 .AddSystem(new ComponentRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT))
+                .AddSystem(new UIInputHandler(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT))
                 .Build();
 
             Game.Components.Add(world);
@@ -45,7 +46,8 @@ namespace Project1
             player.Attach(new Player());
 
             button = uiContainer.CreateEntity();
-            button.Attach(new Transform2(Vector2.Zero));
+            button.Attach(new Transform2(new Vector2(100,100)));
+            button.Attach(new Button());
 
             ChunkRenderer = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 2048);
         }

@@ -33,7 +33,7 @@ namespace Project1
             Game.Components.Add(uiContainer);
 
             button = uiContainer.CreateEntity();
-            button.Attach(new Transform2(Vector2.Zero));
+            button.Attach(new Transform2(new Vector2(100,100)));
         }
 
         public MainMenu(Game1 game) : base(game) { }
