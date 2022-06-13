@@ -15,6 +15,7 @@ namespace Project1
 
         private ComponentMapper<Sprite> spriteMapper;
         private ComponentMapper<Transform2> transformMapper;
+        private ComponentMapper<Button> buttonMapper;
 
         private readonly float VIRTUAL_SCREEN_WIDTH;
         private readonly float VIRTUAL_SCREEN_HEIGHT;
@@ -34,6 +35,7 @@ namespace Project1
         {
             spriteMapper = mapperService.GetMapper<Sprite>();
             transformMapper = mapperService.GetMapper<Transform2>();
+            buttonMapper = mapperService.GetMapper<Button>();
 
             SetScaleMatrix();
         }
@@ -47,27 +49,28 @@ namespace Project1
 
         public override void Update(GameTime gameTime)
         {
-            foreach (var entity in ActiveEntities)
+            MouseState mouseState = Mouse.GetState();
+
+            Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
+            Vector2 scaledMousePos = Vector2.Transform(mousePosition, Matrix.Invert(scaleMatrix));
+
+            if (mouseState.LeftButton == ButtonState.Pressed)
             {
-                MouseState mouseState = Mouse.GetState();
-
-                Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
-                Vector2 scaledMousePos = Vector2.Transform(mousePosition, Matrix.Invert(scaleMatrix));
-
-                Transform2 transform = transformMapper.Get(entity);
-                Sprite sprite = spriteMapper.Get(entity);
-
-                RectangleF hitBox = sprite.GetBoundingRectangle(transform);
-
-                if (mouseState.LeftButton == ButtonState.Pressed)
+                foreach (var entity in ActiveEntities)
                 {
+                    Transform2 transform = transformMapper.Get(entity);
+                    Sprite sprite = spriteMapper.Get(entity);
+                    Button button = buttonMapper.Get(entity);
+
+                    RectangleF hitBox = sprite.GetBoundingRectangle(transform);
+
                     if (hitBox.Contains(scaledMousePos))
                     {
-                        Debug.WriteLine(hitBox.ToString());
-                        Debug.WriteLine(mousePosition.ToString());
+                        button.OnButtonPress();
                     }
                 }
             }
+
         }
     }
 }

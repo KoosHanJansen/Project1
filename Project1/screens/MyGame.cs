@@ -6,6 +6,7 @@ using MonoGame.Extended.Sprites;
 using MonoGame.Extended;
 using Microsoft.Xna.Framework.Graphics;
 using Project1.rendering;
+using System.Diagnostics;
 
 namespace Project1
 {
@@ -47,12 +48,20 @@ namespace Project1
 
             button = uiContainer.CreateEntity();
             button.Attach(new Transform2(new Vector2(100,100)));
-            button.Attach(new Button());
+            Button testButton = new Button();
+            testButton.ButtonPress += OnTestButtonPress;
+            button.Attach(testButton);
 
             ChunkRenderer = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 2048);
         }
 
         public MyGame(Game1 game) : base(game) { }
+
+        void OnTestButtonPress(object source, EventArgs e)
+        {
+            MainMenu mainMenu = new MainMenu(Game);
+            Game.ChangeScreen(ref mainMenu);
+        }
 
         public override void LoadContent()
         {

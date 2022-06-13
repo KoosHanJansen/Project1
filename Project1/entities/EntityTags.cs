@@ -3,8 +3,4 @@
     class Player
     {
     }
-
-    class Button
-    {
-    }
 }
