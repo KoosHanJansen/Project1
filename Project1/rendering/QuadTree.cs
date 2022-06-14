@@ -45,12 +45,7 @@ namespace Project1.rendering
 
             if (depth == 0)
             {
-                //Create chunk bullshit here PogChampignon
-                /*chunk = world.CreateEntity();   
-                chunk.Attach(new Transform2(position));
-                chunk.Attach(new Sprite(CreateChunkTexture()));
-    
-                Debug.WriteLine(position.ToString());*/
+                //Create chunk here
             }
 
             UpdateTree();
