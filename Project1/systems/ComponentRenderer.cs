@@ -54,7 +54,6 @@ namespace Project1
                 Transform2 transform = transformMapper.Get(entity);
                 Sprite sprite = spriteMapper.Get(entity);
 
-                //sprite.Draw(spriteBatch, transform.Position, transform.Rotation, transform.Scale);
                 spriteBatch.Draw(sprite, transform);
             }
 
