@@ -12,15 +12,17 @@ namespace Project1
         private GraphicsDevice graphicsDevice;
         private SpriteBatch spriteBatch;
 
+        private OrthographicCamera camera;
+
         private ComponentMapper<Sprite> spriteMapper;
         private ComponentMapper<Transform2> transformMapper;
 
         private readonly float VIRTUAL_SCREEN_WIDTH;
         private readonly float VIRTUAL_SCREEN_HEIGHT;
 
-        private Matrix scaleMatrix;
+        private Matrix matrix;
 
-        public ComponentRenderer(GraphicsDevice graphicsDevice, float virtualWidth, float virtualHeight)
+        public ComponentRenderer(GraphicsDevice graphicsDevice, float virtualWidth, float virtualHeight, OrthographicCamera camera)
             : base(Aspect.All(typeof(Sprite), typeof(Transform2)))
         {
             this.graphicsDevice = graphicsDevice;
@@ -28,13 +30,16 @@ namespace Project1
             this.VIRTUAL_SCREEN_HEIGHT = virtualHeight;
             
             spriteBatch = new SpriteBatch(graphicsDevice);
+
+            if (camera != null)
+                this.camera = camera;
         }
 
         private void SetScaleMatrix()
         {
             float scaleX = (float)graphicsDevice.Viewport.Width / VIRTUAL_SCREEN_WIDTH;
             float scaleY = (float)graphicsDevice.Viewport.Height / VIRTUAL_SCREEN_HEIGHT;
-            scaleMatrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
+            matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -47,7 +52,8 @@ namespace Project1
 
         public override void Draw(GameTime gameTime)
         {
-            spriteBatch.Begin(transformMatrix: scaleMatrix);
+            Matrix cam = camera.GetViewMatrix();
+            spriteBatch.Begin(transformMatrix: matrix * cam);
             
             foreach(var entity in ActiveEntities)
             {

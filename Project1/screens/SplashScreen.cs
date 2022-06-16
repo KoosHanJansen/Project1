@@ -11,6 +11,8 @@ namespace Project1
     class SplashScreen : GameScreen
     {
         private new Game1 Game => (Game1)base.Game;
+        private OrthographicCamera camera;
+
         private World world;
 
         private Entity splash;
@@ -23,8 +25,10 @@ namespace Project1
         {
             base.Initialize();
 
+            camera = new OrthographicCamera(GraphicsDevice);
+
             world = new WorldBuilder()
-                .AddSystem(new ComponentRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT))
+                .AddSystem(new ComponentRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT, camera))
                 .Build();
 
             Game.Components.Add(world);            

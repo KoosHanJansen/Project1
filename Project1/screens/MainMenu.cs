@@ -12,6 +12,8 @@ namespace Project1
     class MainMenu : GameScreen
     {
         private new Game1 Game => (Game1)base.Game;
+        private OrthographicCamera camera;
+
         private World world;
         private World uiContainer;
 
@@ -21,12 +23,14 @@ namespace Project1
         {
             base.Initialize();
 
+            camera = new OrthographicCamera(GraphicsDevice);
+
             world = new WorldBuilder()
-                .AddSystem(new ComponentRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT))
+                .AddSystem(new ComponentRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT, camera))
                 .Build();
 
             uiContainer = new WorldBuilder()
-                .AddSystem(new ComponentRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT))
+                .AddSystem(new ComponentRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT, camera))
                 .AddSystem(new UIInputHandler(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT))
                 .Build();
 
@@ -57,6 +61,7 @@ namespace Project1
 
         public override void Update(GameTime gameTime)
         {
+            camera.Move(new Vector2(1, 0));
             world.Update(gameTime);
         }
 
