@@ -13,7 +13,6 @@ namespace Project1
         public Movement()
             : base(Aspect.All(typeof(Transform2), typeof(Velocity)))
         {
-
         }
 
         public override void Initialize(IComponentMapperService mapperService)

@@ -74,6 +74,7 @@ namespace Project1
 
             Debug.WriteLine(player.Get<Transform2>().Position.ToString());
             Debug.WriteLine(camera.Position.ToString());
+            Debug.WriteLine(player.Get<Transform2>().Position.X - camera.Position.X);
             world.Update(gameTime);
             ChunkRenderer.UpdateTree();
         }
