@@ -53,7 +53,7 @@ namespace Project1
         public override void Draw(GameTime gameTime)
         {
             Matrix cam = camera.GetViewMatrix();
-            spriteBatch.Begin(transformMatrix: matrix * cam);
+            spriteBatch.Begin(transformMatrix: cam * matrix);
             
             foreach(var entity in ActiveEntities)
             {
