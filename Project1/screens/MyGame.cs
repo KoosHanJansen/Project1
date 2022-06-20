@@ -72,9 +72,6 @@ namespace Project1
         {
             camera.Position = player.Get<Transform2>().Position - Game.VIRTUAL_CENTER;
 
-            Debug.WriteLine(player.Get<Transform2>().Position.ToString());
-            Debug.WriteLine(camera.Position.ToString());
-            Debug.WriteLine(player.Get<Transform2>().Position.X - camera.Position.X);
             world.Update(gameTime);
             ChunkRenderer.UpdateTree();
         }
