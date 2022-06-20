@@ -28,7 +28,6 @@ namespace Project1
 
             camera = new OrthographicCamera(GraphicsDevice);
             
-
             world = new WorldBuilder()
                 .AddSystem(new ComponentRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT, camera))
                 .AddSystem(new Movement())
@@ -37,7 +36,7 @@ namespace Project1
                 .Build();
 
             uiContainer = new WorldBuilder()
-                .AddSystem(new ComponentRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT, camera))
+                .AddSystem(new UIRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT))
                 .AddSystem(new UIInputHandler(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT))
                 .Build();
 
