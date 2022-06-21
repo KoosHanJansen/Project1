@@ -48,7 +48,7 @@ namespace Project1.rendering
             this.world = world;
             this.mapData = mapData;
             this.depth = depth;
-            this.cellSize = 16.0f;
+            this.cellSize = 32.0f;
             this.center = GetCenter();
 
             if (depth == 0)

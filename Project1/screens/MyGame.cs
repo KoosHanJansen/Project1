@@ -7,6 +7,7 @@ using MonoGame.Extended;
 using Microsoft.Xna.Framework.Graphics;
 using Project1.rendering;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Project1
 {
@@ -89,6 +90,18 @@ namespace Project1
         public override void Update(GameTime gameTime)
         {
             camera.Position = player.Get<Transform2>().Position - Game.VIRTUAL_CENTER;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            {
+                camera.ZoomIn(0.1f);
+            }
+            
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            {
+                camera.ZoomOut(0.1f);
+            }
+
+
             world.Update(gameTime);
             ChunkRenderer.UpdateTree();
         }
