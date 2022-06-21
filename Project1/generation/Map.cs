@@ -26,12 +26,12 @@ namespace Project1
             borderColor = new Color(174, 0, 255);
         }
 
-        public Texture2D GenerateMap(MapSettings settings)
+        public Color[,] GenerateMap(MapSettings settings)
         {
             noise = new OpenSimplexNoise(settings.seed);
 
-            Texture2D map = new Texture2D(Game1.graphics.GraphicsDevice, settings.width, settings.height);
-            Color[] data = new Color[map.Width * map.Height];
+            //Texture2D map = new Texture2D(Game1.graphics.GraphicsDevice, settings.width, settings.height);
+            Color[,] data = new Color[settings.width, settings.height];
 
             int index = 0;
 
@@ -54,17 +54,17 @@ namespace Project1
                     grayScale = grayScale > settings.density ? 1 : 0;
                     
                     if (IsBorderPixel(x, y, settings))
-                        data[index] = borderColor;
+                        data[y, x] = borderColor;
                     else
-                        data[index] = data[index] = new Color(grayScale, grayScale, grayScale);
+                        data[y, x] = new Color(grayScale, grayScale, grayScale);
 
                     index++;
                 }
             }
 
-            map.SetData(data);
+            //map.SetData(data);
 
-            return map;
+            return data;
         }
 
         private float CenterMask(int x, int y, MapSettings settings)

@@ -19,10 +19,9 @@ namespace Project1
         private World uiContainer;
 
         private Map map;
-        private Texture2D mapTexture;
+        private Color[,] mapData;
 
         private Entity player;
-        private Entity mapEntity;
 
         private QuadTree ChunkRenderer;
 
@@ -47,16 +46,12 @@ namespace Project1
             Game.Components.Add(world);
             Game.Components.Add(uiContainer);
 
-            mapEntity = world.CreateEntity();
-            mapEntity.Attach(new Transform2(Game.VIRTUAL_CENTER));
-
             player = world.CreateEntity();
             player.Attach(new Transform2(Game.VIRTUAL_CENTER));
             player.Attach(new PlayerInput());
             player.Attach(new Velocity());
             player.Attach(new Player());
 
-            ChunkRenderer = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 2048);
             map = new Map();
 
             Map.MapSettings mSettings = new Map.MapSettings();
@@ -71,7 +66,9 @@ namespace Project1
             mSettings.scale = 20.0f;
             mSettings.frequency = 1.0f;
 
-            mapTexture = map.GenerateMap(mSettings);
+            mapData = map.GenerateMap(mSettings);
+
+            ChunkRenderer = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 1024, mapData, 6);            
         }
 
         public MyGame(Game1 game) : base(game) { }
@@ -85,7 +82,6 @@ namespace Project1
         public override void LoadContent()
         {
             base.LoadContent();
-            mapEntity.Attach(new Sprite(mapTexture));
             player.Attach(new Sprite(Content.Load<Texture2D>("TestPNG64x64")));
             
         }
@@ -93,7 +89,6 @@ namespace Project1
         public override void Update(GameTime gameTime)
         {
             camera.Position = player.Get<Transform2>().Position - Game.VIRTUAL_CENTER;
-
             world.Update(gameTime);
             ChunkRenderer.UpdateTree();
         }
