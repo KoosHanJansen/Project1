@@ -57,8 +57,6 @@ namespace Project1.rendering
                 chunk = world.CreateEntity();   
                 chunk.Attach(new Transform2(new Vector2(position.X * cellSize, position.Y * cellSize)));
                 chunk.Attach(new Sprite(CreateChunkTexture()));
-    
-                Debug.WriteLine(chunk.Get<Transform2>().Position.ToString());
             }
 
             UpdateTree();
