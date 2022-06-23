@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
 
 namespace Project1.rendering
 {
@@ -52,14 +53,16 @@ namespace Project1.rendering
             this.center = GetCenter();
 
             if (depth == 0)
-            {
-                //Create chunk here
-                chunk = world.CreateEntity();   
-                chunk.Attach(new Transform2(new Vector2(position.X * cellSize, position.Y * cellSize)));
-                chunk.Attach(new Sprite(CreateChunkTexture()));
-            }
+                CreateChunk();
 
             UpdateTree();
+        }
+
+        public void CreateChunk()
+        {
+            chunk = world.CreateEntity();
+            chunk.Attach(new Transform2(new Vector2(position.X * cellSize, position.Y * cellSize)));
+            chunk.Attach(new Sprite(CreateChunkTexture()));
         }
 
         public void UpdateTree()
@@ -109,6 +112,9 @@ namespace Project1.rendering
 
         private Texture2D CreateChunkTexture()
         {
+            if (mapData == null)
+                return null;
+
             Texture2D ct = new Texture2D(Game1.graphics.GraphicsDevice, (int)size * (int)cellSize, (int)size * (int)cellSize);
             Color[] data = new Color[ct.Width * ct.Height];
 

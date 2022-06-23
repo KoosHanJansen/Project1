@@ -69,7 +69,8 @@ namespace Project1
 
             mapData = map.GenerateMap(mSettings);
 
-            ChunkRenderer = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 1024, mapData, 6);            
+            ChunkRenderer = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 1024, mapData, 6);
+            Debug.WriteLine(camera.Origin.ToString());
         }
 
         public MyGame(Game1 game) : base(game) { }
