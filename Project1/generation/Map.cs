@@ -30,7 +30,6 @@ namespace Project1
         {
             noise = new OpenSimplexNoise(settings.seed);
 
-            //Texture2D map = new Texture2D(Game1.graphics.GraphicsDevice, settings.width, settings.height);
             Color[,] data = new Color[settings.width, settings.height];
 
             int index = 0;
@@ -61,8 +60,6 @@ namespace Project1
                     index++;
                 }
             }
-
-            //map.SetData(data);
 
             return data;
         }
