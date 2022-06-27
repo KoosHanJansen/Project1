@@ -64,7 +64,7 @@ namespace Project1
             mSettings.height = 1024;
             mSettings.borderSize = 10;
             mSettings.density = 0.55f;
-            mSettings.scale = 20.0f;
+            mSettings.scale = 30.0f;
             mSettings.frequency = 1.0f;
 
             mapData = map.GenerateMap(mSettings);
