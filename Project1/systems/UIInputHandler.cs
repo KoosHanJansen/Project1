@@ -11,24 +11,13 @@ namespace Project1
 {
     class UIInputHandler : EntityUpdateSystem
     {
-        private GraphicsDevice graphicsDevice;
-
         private ComponentMapper<Sprite> spriteMapper;
         private ComponentMapper<Transform2> transformMapper;
         private ComponentMapper<Button> buttonMapper;
 
-        private readonly float VIRTUAL_SCREEN_WIDTH;
-        private readonly float VIRTUAL_SCREEN_HEIGHT;
-
-        private Matrix scaleMatrix;
-
-        public UIInputHandler(GraphicsDevice graphicsDevice, float virtualWidth, float virtualHeight)
+        public UIInputHandler()
             : base (Aspect.All(typeof(Button), typeof(Sprite), typeof(Transform2)))
         {
-            this.graphicsDevice = graphicsDevice;
-
-            this.VIRTUAL_SCREEN_WIDTH = virtualWidth;
-            this.VIRTUAL_SCREEN_HEIGHT = virtualHeight;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -36,19 +25,12 @@ namespace Project1
             spriteMapper = mapperService.GetMapper<Sprite>();
             transformMapper = mapperService.GetMapper<Transform2>();
             buttonMapper = mapperService.GetMapper<Button>();
-
-            SetScaleMatrix();
-        }
-
-        private void SetScaleMatrix()
-        {
-            float scaleX = (float)graphicsDevice.Viewport.Width / VIRTUAL_SCREEN_WIDTH;
-            float scaleY = (float)graphicsDevice.Viewport.Height / VIRTUAL_SCREEN_HEIGHT;
-            scaleMatrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
         }
 
         public override void Update(GameTime gameTime)
         {
+            Matrix scaleMatrix = Game1.viewportAdapter.GetScaleMatrix();
+
             MouseState mouseState = Mouse.GetState();
 
             Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);

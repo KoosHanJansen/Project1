@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
+using MonoGame.Extended.ViewportAdapters;
+using Project1.libs;
 using System;
 
 namespace Project1
@@ -11,6 +13,7 @@ namespace Project1
     public class Game1 : Game
     {
         public static GraphicsDeviceManager graphics;
+        public static GameViewport viewportAdapter;
         public SpriteBatch SpriteBatch;
 
         private Settings gameSettings;
@@ -29,6 +32,7 @@ namespace Project1
             VIRTUAL_CENTER = new Vector2(VIRTUAL_WIDTH * 0.5f, VIRTUAL_HEIGHT * 0.5f);
 
             graphics = new GraphicsDeviceManager(this);
+            viewportAdapter = new GameViewport((int)VIRTUAL_WIDTH, (int)VIRTUAL_HEIGHT, GraphicsDevice);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 

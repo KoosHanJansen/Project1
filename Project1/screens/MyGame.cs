@@ -30,18 +30,18 @@ namespace Project1
         {
             base.Initialize();
 
-            camera = new OrthographicCamera(GraphicsDevice);
+            camera = new OrthographicCamera(Game1.viewportAdapter);
             
             world = new WorldBuilder()
-                .AddSystem(new ComponentRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT, camera))
+                .AddSystem(new ComponentRenderer(GraphicsDevice, camera))
                 .AddSystem(new Movement())
                 .AddSystem(new PlayerControl())
                 .AddSystem(new PlayerInputHandler())                
                 .Build();
 
             uiContainer = new WorldBuilder()
-                .AddSystem(new UIRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT))
-                .AddSystem(new UIInputHandler(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT))
+                .AddSystem(new UIRenderer(GraphicsDevice))
+                .AddSystem(new UIInputHandler())
                 .Build();
 
             Game.Components.Add(world);
@@ -90,8 +90,9 @@ namespace Project1
 
         public override void Update(GameTime gameTime)
         {
-            camera.Position = player.Get<Transform2>().Position - Game.VIRTUAL_CENTER;
-
+            //camera.Position = player.Get<Transform2>().Position - (Game.VIRTUAL_CENTER);
+            camera.LookAt(player.Get<Transform2>().Position);
+            
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
                 camera.ZoomIn(0.1f);
@@ -101,7 +102,6 @@ namespace Project1
             {
                 camera.ZoomOut(0.1f);
             }
-
 
             world.Update(gameTime);
             ChunkRenderer.UpdateTree();

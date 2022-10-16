@@ -25,10 +25,10 @@ namespace Project1
         {
             base.Initialize();
 
-            camera = new OrthographicCamera(GraphicsDevice);
+            camera = new OrthographicCamera(Game1.viewportAdapter);
 
             world = new WorldBuilder()
-                .AddSystem(new ComponentRenderer(GraphicsDevice, Game.VIRTUAL_WIDTH, Game.VIRTUAL_HEIGHT, camera))
+                .AddSystem(new ComponentRenderer(GraphicsDevice, camera))
                 .Build();
 
             Game.Components.Add(world);            
