@@ -16,6 +16,7 @@ namespace Project1.rendering
         private Vector2 position;
         private Vector2 center;
         private Transform2 target;
+        private RectangleF rect;
         private float size;
         private float halfSize;
         private float cellSize;
@@ -45,17 +46,35 @@ namespace Project1.rendering
             this.position = position;
             this.target = target;
             this.size = size;
+            this.cellSize = 32.0f;
+            this.rect = new RectangleF(position.X * cellSize, position.Y * cellSize, size * cellSize, size * cellSize);
             this.halfSize = size * 0.5f;
             this.world = world;
             this.mapData = mapData;
             this.depth = depth;
-            this.cellSize = 32.0f;
             this.center = GetCenter();
 
             if (depth == 0)
                 CreateChunk();
 
             UpdateTree();
+        }
+
+        private Entity GetChunkAt(Vector2 point)
+        {
+            if (!rect.Contains(point))
+                return null;
+
+            if (depth == 0)
+                return chunk;
+            
+            for (int i = 0; i < branches.Length; i++)
+            {
+                if (branches[i].rect.Contains(point))
+                    return branches[i].GetChunkAt(point);
+            }
+
+            return null;
         }
 
         public void CreateChunk()
@@ -83,7 +102,7 @@ namespace Project1.rendering
 
         private Vector2 GetCenter()
         {
-            return new Vector2((position.X + halfSize) * cellSize, (position.Y + halfSize) * cellSize);
+            return new Vector2(rect.Center.X, rect.Center.Y);
         }
 
         private void Subdivide()

@@ -13,7 +13,6 @@ namespace Project1
         public PlayerControl()
             : base(Aspect.All(typeof(Player), typeof(PlayerInput)))
         {
-
         }
 
         public override void Initialize(IComponentMapperService mapperService)

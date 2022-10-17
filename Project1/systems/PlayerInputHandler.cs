@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using System;
+using System.Diagnostics;
 
 namespace Project1
 {
@@ -9,12 +12,13 @@ namespace Project1
     {
         private ComponentMapper<Velocity> velocityMapper;
         private ComponentMapper<PlayerInput> playerInputMapper;
+        private ComponentMapper<MouseInfo> mouseInfoMapper;
 
         private readonly float PLAYER_SPEED;
         private readonly float SPRINT_MULTIPLIER;
 
         public PlayerInputHandler()
-            : base(Aspect.All(typeof(Velocity), typeof(PlayerInput)))
+            : base(Aspect.All(typeof(Velocity), typeof(PlayerInput), typeof(MouseInfo)))
         {
             PLAYER_SPEED = 3;
             SPRINT_MULTIPLIER = 2;
@@ -24,6 +28,7 @@ namespace Project1
         {
             velocityMapper = mapperService.GetMapper<Velocity>();
             playerInputMapper = mapperService.GetMapper<PlayerInput>();
+            mouseInfoMapper = mapperService.GetMapper<MouseInfo>();
         }
 
         public override void Update(GameTime gameTime)
@@ -32,6 +37,7 @@ namespace Project1
             {
                 PlayerInput playerInput = playerInputMapper.Get(entity);
                 Velocity velocity = velocityMapper.Get(entity);
+                MouseInfo mouse = mouseInfoMapper.Get(entity);
 
                 float hor = boolToInt(playerInput.keyRight) + -boolToInt(playerInput.keyLeft);
                 float ver = boolToInt(playerInput.keyBackwards) + -boolToInt(playerInput.keyForward);
@@ -43,6 +49,9 @@ namespace Project1
                     velocity.speed.Normalize();
 
                 velocity.speed *= playerInput.Sprint ? PLAYER_SPEED * SPRINT_MULTIPLIER : PLAYER_SPEED;
+
+                if (mouse.leftButton)
+                    Debug.WriteLine("Player: " + mouse.position.ToString());
             }
         }
 

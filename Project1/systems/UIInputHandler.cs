@@ -14,9 +14,10 @@ namespace Project1
         private ComponentMapper<Sprite> spriteMapper;
         private ComponentMapper<Transform2> transformMapper;
         private ComponentMapper<Button> buttonMapper;
+        private ComponentMapper<MouseInfo> mouseInfoMapper;
 
         public UIInputHandler()
-            : base (Aspect.All(typeof(Button), typeof(Sprite), typeof(Transform2)))
+            : base (Aspect.All(typeof(Button), typeof(Sprite), typeof(Transform2), typeof(MouseInfo)))
         {
         }
 
@@ -25,31 +26,28 @@ namespace Project1
             spriteMapper = mapperService.GetMapper<Sprite>();
             transformMapper = mapperService.GetMapper<Transform2>();
             buttonMapper = mapperService.GetMapper<Button>();
+            mouseInfoMapper = mapperService.GetMapper<MouseInfo>();
         }
 
         public override void Update(GameTime gameTime)
         {
-            Matrix scaleMatrix = Game1.viewportAdapter.GetScaleMatrix();
-
-            MouseState mouseState = Mouse.GetState();
-
-            Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
-            Vector2 scaledMousePos = Vector2.Transform(mousePosition, Matrix.Invert(scaleMatrix));
-
-            if (mouseState.LeftButton == ButtonState.Pressed)
+            foreach (var entity in ActiveEntities)
             {
-                foreach (var entity in ActiveEntities)
-                {
-                    Transform2 transform = transformMapper.Get(entity);
-                    Sprite sprite = spriteMapper.Get(entity);
-                    Button button = buttonMapper.Get(entity);
+                Transform2 transform = transformMapper.Get(entity);
+                Sprite sprite = spriteMapper.Get(entity);
+                Button button = buttonMapper.Get(entity);
+                MouseInfo mouse = mouseInfoMapper.Get(entity);
 
+                if (mouse.leftButton)
+                {
                     RectangleF hitBox = sprite.GetBoundingRectangle(transform);
 
-                    if (hitBox.Contains(scaledMousePos))
+                    if (hitBox.Contains(mouse.localPosition))
                     {
                         button.OnButtonPress();
                     }
+
+                    Debug.WriteLine("UI: " + mouse.localPosition.ToString());
                 }
             }
 

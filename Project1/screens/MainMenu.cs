@@ -17,6 +17,7 @@ namespace Project1
         private World world;
         private World uiContainer;
 
+        private MouseInfo mouseInfo;
         private Entity playBtn;
 
         public override void Initialize()
@@ -30,6 +31,7 @@ namespace Project1
                 .Build();
 
             uiContainer = new WorldBuilder()
+                .AddSystem(new MouseControl(camera))
                 .AddSystem(new UIRenderer(GraphicsDevice))
                 .AddSystem(new UIInputHandler())
                 .Build();
@@ -37,12 +39,15 @@ namespace Project1
             Game.Components.Add(world);
             Game.Components.Add(uiContainer);
 
+            mouseInfo = new MouseInfo();
+
             Button playButton = new Button();
             playButton.ButtonPress += OnPlayButtonPressed;
 
             playBtn = uiContainer.CreateEntity();
             playBtn.Attach(new Transform2(Game.VIRTUAL_CENTER));
             playBtn.Attach(playButton);
+            playBtn.Attach(mouseInfo);
         }
 
         public MainMenu(Game1 game) : base(game) { }
@@ -61,7 +66,6 @@ namespace Project1
 
         public override void Update(GameTime gameTime)
         {
-            camera.Move(new Vector2(1, 0));
             world.Update(gameTime);
         }
 

@@ -22,6 +22,7 @@ namespace Project1
         private Map map;
         private Color[,] mapData;
 
+        private MouseInfo mouseInfo;
         private Entity player;
 
         private QuadTree ChunkRenderer;
@@ -34,12 +35,14 @@ namespace Project1
             
             world = new WorldBuilder()
                 .AddSystem(new ComponentRenderer(GraphicsDevice, camera))
+                .AddSystem(new MouseControl(camera))
                 .AddSystem(new Movement())
                 .AddSystem(new PlayerControl())
-                .AddSystem(new PlayerInputHandler())                
+                .AddSystem(new PlayerInputHandler())
                 .Build();
 
             uiContainer = new WorldBuilder()
+                .AddSystem(new MouseControl(camera))
                 .AddSystem(new UIRenderer(GraphicsDevice))
                 .AddSystem(new UIInputHandler())
                 .Build();
@@ -47,11 +50,14 @@ namespace Project1
             Game.Components.Add(world);
             Game.Components.Add(uiContainer);
 
+            mouseInfo = new MouseInfo();
+
             player = world.CreateEntity();
             player.Attach(new Transform2(Game.VIRTUAL_CENTER));
             player.Attach(new PlayerInput());
             player.Attach(new Velocity());
             player.Attach(new Player());
+            player.Attach(mouseInfo);
 
             map = new Map();
 
@@ -90,7 +96,6 @@ namespace Project1
 
         public override void Update(GameTime gameTime)
         {
-            //camera.Position = player.Get<Transform2>().Position - (Game.VIRTUAL_CENTER);
             camera.LookAt(player.Get<Transform2>().Position);
             
             if (Keyboard.GetState().IsKeyDown(Keys.Up))

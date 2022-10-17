@@ -31,7 +31,7 @@ namespace Project1
                 .AddSystem(new ComponentRenderer(GraphicsDevice, camera))
                 .Build();
 
-            Game.Components.Add(world);            
+            Game.Components.Add(world);
         }
 
         public override void LoadContent()
