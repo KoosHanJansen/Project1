@@ -50,7 +50,6 @@ namespace Project1
                     Debug.WriteLine("UI: " + mouse.localPosition.ToString());
                 }
             }
-
         }
     }
 }

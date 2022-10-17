@@ -14,9 +14,8 @@ namespace Project1.rendering
     class QuadTree
     {
         private Vector2 position;
-        private Vector2 center;
         private Transform2 target;
-        private RectangleF rect;
+        public RectangleF rect;
         private float size;
         private float halfSize;
         private float cellSize;
@@ -52,7 +51,6 @@ namespace Project1.rendering
             this.world = world;
             this.mapData = mapData;
             this.depth = depth;
-            this.center = GetCenter();
 
             if (depth == 0)
                 CreateChunk();
@@ -60,14 +58,14 @@ namespace Project1.rendering
             UpdateTree();
         }
 
-        private Entity GetChunkAt(Vector2 point)
+        private QuadTree GetChunkAt(Vector2 point)
         {
             if (!rect.Contains(point))
                 return null;
 
             if (depth == 0)
-                return chunk;
-            
+                return this;
+
             for (int i = 0; i < branches.Length; i++)
             {
                 if (branches[i].rect.Contains(point))
@@ -77,10 +75,32 @@ namespace Project1.rendering
             return null;
         }
 
+        public bool RemoveBlockAt(Vector2 point)
+        {
+            QuadTree chunk = GetChunkAt(point);
+
+            if (chunk == null)
+                return false;
+
+            Vector2 pointInData = new Vector2(MathF.Floor(point.X / cellSize), MathF.Floor(point.Y / cellSize));
+
+            chunk.mapData[(int)pointInData.Y, (int)pointInData.X] = Color.White;
+            chunk.RefreshChunk();
+
+            return true;
+        }
+
+        public void RefreshChunk()
+        {
+            chunk.Destroy();
+            CreateChunk();
+            Debug.WriteLine("Chunk refreshed!");
+        }
+
         public void CreateChunk()
         {
             chunk = world.CreateEntity();
-            chunk.Attach(new Transform2(new Vector2(position.X * cellSize, position.Y * cellSize)));
+            chunk.Attach(new Transform2(new Vector2((position.X * cellSize) + 256, (position.Y * cellSize) + 256)));
             chunk.Attach(new Sprite(CreateChunkTexture()));
         }
 
@@ -97,7 +117,7 @@ namespace Project1.rendering
 
         private float DistanceToTarget()
         {
-            return Vector2.Distance(target.Position, center);
+            return Vector2.Distance(target.Position, GetCenter());
         }
 
         private Vector2 GetCenter()

@@ -32,13 +32,15 @@ namespace Project1
             base.Initialize();
 
             camera = new OrthographicCamera(Game1.viewportAdapter);
-            
+
+            PlayerInputHandler piHandler = new PlayerInputHandler();
+
             world = new WorldBuilder()
                 .AddSystem(new ComponentRenderer(GraphicsDevice, camera))
                 .AddSystem(new MouseControl(camera))
                 .AddSystem(new Movement())
                 .AddSystem(new PlayerControl())
-                .AddSystem(new PlayerInputHandler())
+                .AddSystem(piHandler)
                 .Build();
 
             uiContainer = new WorldBuilder()
@@ -76,6 +78,7 @@ namespace Project1
             mapData = map.GenerateMap(mSettings);
 
             ChunkRenderer = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 1024, mapData, 6);
+            piHandler.SetMap(ChunkRenderer);
             Debug.WriteLine(camera.Origin.ToString());
         }
 

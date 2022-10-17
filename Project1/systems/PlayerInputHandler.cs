@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
+using Project1.rendering;
 using System;
 using System.Diagnostics;
 
@@ -10,6 +11,8 @@ namespace Project1
 {
     class PlayerInputHandler : EntityUpdateSystem
     {
+        private QuadTree map;
+
         private ComponentMapper<Velocity> velocityMapper;
         private ComponentMapper<PlayerInput> playerInputMapper;
         private ComponentMapper<MouseInfo> mouseInfoMapper;
@@ -17,11 +20,18 @@ namespace Project1
         private readonly float PLAYER_SPEED;
         private readonly float SPRINT_MULTIPLIER;
 
+        private float digCooldown;
+
         public PlayerInputHandler()
             : base(Aspect.All(typeof(Velocity), typeof(PlayerInput), typeof(MouseInfo)))
         {
             PLAYER_SPEED = 3;
             SPRINT_MULTIPLIER = 2;
+        }
+
+        public void SetMap(QuadTree map)
+        {
+            this.map = map;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -50,8 +60,14 @@ namespace Project1
 
                 velocity.speed *= playerInput.Sprint ? PLAYER_SPEED * SPRINT_MULTIPLIER : PLAYER_SPEED;
 
-                if (mouse.leftButton)
+                digCooldown--; 
+
+                if (mouse.leftButton && digCooldown < 0)
+                {
+                    map.RemoveBlockAt(mouse.position);
                     Debug.WriteLine("Player: " + mouse.position.ToString());
+                    digCooldown = 30;
+                }
             }
         }
 
