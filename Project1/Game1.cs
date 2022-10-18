@@ -14,6 +14,7 @@ namespace Project1
     {
         public static GraphicsDeviceManager graphics;
         public static GameViewport viewportAdapter;
+        public static Time time;
         public SpriteBatch SpriteBatch;
 
         private Settings gameSettings;
@@ -33,6 +34,7 @@ namespace Project1
 
             graphics = new GraphicsDeviceManager(this);
             viewportAdapter = new GameViewport((int)VIRTUAL_WIDTH, (int)VIRTUAL_HEIGHT, GraphicsDevice);
+            time = new Time();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
@@ -72,6 +74,7 @@ namespace Project1
                 graphics.ToggleFullScreen();
 
             base.Update(gameTime);
+            time.Update();
         }
 
         protected override void Draw(GameTime gameTime)

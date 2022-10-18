@@ -171,12 +171,12 @@ namespace Project1.rendering
                 {
                     int ix = (int)position.X + (int)MathF.Floor(x / cellSize);
 
-                    if (mapData[iy, ix].Equals(Color.White))
-                        data[index] = Color.Transparent;
-                    else if (mapData[iy, ix].Equals(new Color(174, 0, 255)))
-                        data[index] = new Color(174, 0, 255);
-                    else
+                    if (mapData[iy, ix].Equals(Color.Black))
                         data[index] = Color.White;
+                    else if (mapData[iy, ix].Equals(Color.White))
+                        data[index] = Color.Transparent;
+                    else
+                        data[index] = mapData[iy, ix];
 
                     index++;
                 }
