@@ -21,7 +21,6 @@ namespace Project1.rendering
         private float cellSize;
         private QuadTree[] branches;
         private Color[,] mapData;
-        
         private int depth;
         
         private World world;
@@ -66,6 +65,9 @@ namespace Project1.rendering
             if (depth == 0)
                 return this;
 
+            if (depth != 0 && branches == null)
+                return null;
+
             for (int i = 0; i < branches.Length; i++)
             {
                 if (branches[i].rect.Contains(point))
@@ -83,6 +85,9 @@ namespace Project1.rendering
                 return false;
 
             Vector2 pointInData = new Vector2(MathF.Floor(point.X / cellSize), MathF.Floor(point.Y / cellSize));
+
+            if (chunk.mapData[(int)pointInData.Y, (int)pointInData.X] == Color.White)
+                return false;
 
             chunk.mapData[(int)pointInData.Y, (int)pointInData.X] = Color.White;
             chunk.RefreshChunk();

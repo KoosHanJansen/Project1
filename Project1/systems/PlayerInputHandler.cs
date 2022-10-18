@@ -66,7 +66,7 @@ namespace Project1
                 {
                     map.RemoveBlockAt(mouse.position);
                     Debug.WriteLine("Player: " + mouse.position.ToString());
-                    digCooldown = 30;
+                    digCooldown = 0;
                 }
             }
         }
