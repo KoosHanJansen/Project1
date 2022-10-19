@@ -60,13 +60,13 @@ namespace Project1
 
                 velocity.speed *= playerInput.Sprint ? PLAYER_SPEED * SPRINT_MULTIPLIER : PLAYER_SPEED;
 
-                digCooldown -= Time.deltaTime; 
+                digCooldown -= Time.deltaTime;
 
                 if (mouse.leftButton && digCooldown < 0)
                 {
-                    map.RemoveBlockAt(mouse.position);
+                    map.RemoveBlockAt(mouse.position, Color.White);
                     Debug.WriteLine("Player: " + mouse.position.ToString());
-                    digCooldown = 2;
+                    digCooldown = 0.2f;
                 }
             }
         }

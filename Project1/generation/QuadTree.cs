@@ -77,7 +77,7 @@ namespace Project1.rendering
             return null;
         }
 
-        public bool RemoveBlockAt(Vector2 point)
+        public bool RemoveBlockAt(Vector2 point, Color block)
         {
             QuadTree chunk = GetChunkAt(point);
 
@@ -89,7 +89,7 @@ namespace Project1.rendering
             if (chunk.mapData[(int)pointInData.Y, (int)pointInData.X] == Color.White)
                 return false;
 
-            chunk.mapData[(int)pointInData.Y, (int)pointInData.X] = Color.White;
+            chunk.mapData[(int)pointInData.Y, (int)pointInData.X] = block;
             chunk.RefreshChunk();
 
             return true;
