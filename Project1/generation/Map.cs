@@ -10,6 +10,9 @@ namespace Project1
     {
         private OpenSimplexNoise noise;
         private Color borderColor;
+        private MapSettings settings;
+
+        public MapSettings Settings { set { this.settings = value; } get { return this.settings; } }
 
         public struct MapSettings {
             public int seed;
@@ -26,8 +29,11 @@ namespace Project1
             borderColor = new Color(174, 0, 255);
         }
 
-        public Color[,] GenerateMap(MapSettings settings)
+        public Color[,] GenerateMap()
         {
+            if (this.settings.Equals(default(MapSettings)))
+                return null;
+
             noise = new OpenSimplexNoise(settings.seed);
 
             Color[,] data = new Color[settings.width, settings.height];
@@ -43,7 +49,7 @@ namespace Project1
                 {
                     noiseX = (x / settings.scale) * settings.frequency;
 
-                    float mask = CenterMask(x, y, settings);
+                    float mask = CenterMask(x, y);
                     
                     float grayScale = (1 + (float)noise.Evaluate((double)noiseX, (double)noiseY)) / 2;
                     
@@ -51,8 +57,10 @@ namespace Project1
                         grayScale *= mask / 0.5f;
 
                     grayScale = grayScale > settings.density ? 1 : 0;
+
+                    grayScale = SpawnMask(x, y, 25) == 1 ? 1 : grayScale;
                     
-                    if (IsBorderPixel(x, y, settings))
+                    if (IsBorderPixel(x, y))
                         data[y, x] = borderColor;
                     else
                         data[y, x] = new Color(grayScale, grayScale, grayScale);
@@ -61,10 +69,26 @@ namespace Project1
                 }
             }
 
+            return SetSpawnPoint(data);
+        }
+
+        private float SpawnMask(int x, int y, int radius)
+        {
+            float cX = settings.width * 0.5f;
+            float cY = settings.height * 0.5f;
+
+            float distance = Distance(cX, cY, x, y);
+
+            return distance < radius ? 1 : 0;
+        }
+
+        private Color[,] SetSpawnPoint(Color[,] data)
+        {
+            data[settings.height / 2, settings.width / 2] = Color.Red;
             return data;
         }
 
-        private float CenterMask(int x, int y, MapSettings settings)
+        private float CenterMask(int x, int y)
         {
             float cX = settings.width * 0.5f;
             float cY = settings.height * 0.5f;
@@ -76,7 +100,7 @@ namespace Project1
             return 1 - (distance / maxDistance);
         }
 
-        private bool IsBorderPixel(int x, int y, MapSettings settings)
+        private bool IsBorderPixel(int x, int y)
         {
             if (x < settings.borderSize || x > settings.width - settings.borderSize ||
                 y < settings.borderSize || y > settings.height - settings.borderSize)

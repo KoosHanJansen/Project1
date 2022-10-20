@@ -75,11 +75,11 @@ namespace Project1
             mSettings.scale = 20.0f;
             mSettings.frequency = 1.0f;
 
-            mapData = map.GenerateMap(mSettings);
+            map.Settings = mSettings;
+            mapData = map.GenerateMap();
 
             ChunkRenderer = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 1024, mapData, 6);
             piHandler.SetMap(ChunkRenderer);
-            Debug.WriteLine(camera.Origin.ToString());
         }
 
         public MyGame(Game1 game) : base(game) { }
@@ -94,7 +94,6 @@ namespace Project1
         {
             base.LoadContent();
             player.Attach(new Sprite(Content.Load<Texture2D>("TestPNG64x64")));
-            
         }
 
         public override void Update(GameTime gameTime)

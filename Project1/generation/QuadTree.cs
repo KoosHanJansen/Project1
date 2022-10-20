@@ -77,6 +77,24 @@ namespace Project1.rendering
             return null;
         }
 
+        public bool PlaceBlockAt(Vector2 point, Color block)
+        {
+            QuadTree chunk = GetChunkAt(point);
+
+            if (chunk == null)
+                return false;
+
+            Vector2 pointInData = new Vector2(MathF.Floor(point.X / cellSize), MathF.Floor(point.Y / cellSize));
+
+            if (chunk.mapData[(int)pointInData.Y, (int)pointInData.X] != Color.White)
+                return false;
+
+            chunk.mapData[(int)pointInData.Y, (int)pointInData.X] = block;
+            chunk.UpdateChunk();
+
+            return true;
+        }
+
         public bool RemoveBlockAt(Vector2 point, Color block)
         {
             QuadTree chunk = GetChunkAt(point);
@@ -90,16 +108,15 @@ namespace Project1.rendering
                 return false;
 
             chunk.mapData[(int)pointInData.Y, (int)pointInData.X] = block;
-            chunk.RefreshChunk();
+            chunk.UpdateChunk();
 
             return true;
         }
 
-        public void RefreshChunk()
+        public void UpdateChunk()
         {
             chunk.Destroy();
             CreateChunk();
-            Debug.WriteLine("Chunk refreshed!");
         }
 
         public void CreateChunk()

@@ -20,7 +20,7 @@ namespace Project1
         private readonly float PLAYER_SPEED;
         private readonly float SPRINT_MULTIPLIER;
 
-        private float digCooldown;
+        private float globalCooldown;
 
         public PlayerInputHandler()
             : base(Aspect.All(typeof(Velocity), typeof(PlayerInput), typeof(MouseInfo)))
@@ -60,13 +60,28 @@ namespace Project1
 
                 velocity.speed *= playerInput.Sprint ? PLAYER_SPEED * SPRINT_MULTIPLIER : PLAYER_SPEED;
 
-                digCooldown -= Time.deltaTime;
+                globalCooldown -= Time.deltaTime;
 
-                if (mouse.leftButton && digCooldown < 0)
+                if (mouse.leftButton && globalCooldown < 0)
                 {
-                    map.RemoveBlockAt(mouse.position, Color.White);
-                    Debug.WriteLine("Player: " + mouse.position.ToString());
-                    digCooldown = 0.2f;
+                    bool blockRemoved = map.RemoveBlockAt(mouse.position, Color.White);
+                    
+                    if (blockRemoved)
+                    {
+                        Debug.WriteLine("Player removed block: " + mouse.position.ToString());
+                        globalCooldown = 0.2f;
+                    }
+                }
+
+                if (mouse.rightButton && globalCooldown < 0)
+                {
+                    bool blockPlaced = map.PlaceBlockAt(mouse.position, Color.Brown);
+                    
+                    if (blockPlaced)
+                    {
+                        Debug.WriteLine("Player placed block: " + mouse.position.ToString());
+                        globalCooldown = 0.2f;
+                    }
                 }
             }
         }
