@@ -9,20 +9,16 @@ namespace Project1
 {
     class UIInputHandler : EntityUpdateSystem
     {
-        private ComponentMapper<Sprite> spriteMapper;
-        private ComponentMapper<Transform2> transformMapper;
         private ComponentMapper<Button> buttonMapper;
         private ComponentMapper<MouseInfo> mouseInfoMapper;
 
         public UIInputHandler()
-            : base (Aspect.All(typeof(Button), typeof(Sprite), typeof(Transform2), typeof(MouseInfo)))
+            : base (Aspect.All(typeof(Button), typeof(MouseInfo)))
         {
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            spriteMapper = mapperService.GetMapper<Sprite>();
-            transformMapper = mapperService.GetMapper<Transform2>();
             buttonMapper = mapperService.GetMapper<Button>();
             mouseInfoMapper = mapperService.GetMapper<MouseInfo>();
         }
@@ -31,14 +27,12 @@ namespace Project1
         {
             foreach (var entity in ActiveEntities)
             {
-                Transform2 transform = transformMapper.Get(entity);
-                Sprite sprite = spriteMapper.Get(entity);
                 Button button = buttonMapper.Get(entity);
                 MouseInfo mouse = mouseInfoMapper.Get(entity);
 
                 if (mouse.leftButton)
                 {
-                    RectangleF hitBox = sprite.GetBoundingRectangle(transform);
+                    RectangleF hitBox = button.HitBox;
 
                     if (hitBox.Contains(mouse.localPosition))
                     {

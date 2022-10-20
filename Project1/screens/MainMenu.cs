@@ -43,16 +43,12 @@ namespace Project1
 
             mouseInfo = new MouseInfo();
 
-            Button playButton = new Button();
-            playButton.ButtonPress += OnPlayButtonPressed;
-
             playBtn = uiContainer.CreateEntity();
-            playBtn.Attach(new Transform2(Game.VIRTUAL_CENTER));
-            playBtn.Attach(playButton);
             playBtn.Attach(mouseInfo);
 
             //Text test
             newGame = uiContainer.CreateEntity();
+            newGame.Attach(mouseInfo);
         }
 
         public MainMenu(Game1 game) : base(game) { }
@@ -60,11 +56,31 @@ namespace Project1
         public override void LoadContent()
         {
             base.LoadContent();
+            //Play Button
             playBtn.Attach(new Sprite(Content.Load<Texture2D>("StartGame")));
-            newGame.Attach(new Text(Content.Load<SpriteFont>("mmBigHeader"), "New Game", Game.VIRTUAL_CENTER, Color.White));
+
+            Transform2 btnTransform = new Transform2(Game.VIRTUAL_CENTER);
+            Button playButton = new Button();
+            playButton.ButtonPress += OnPlayButtonPressed;
+            playBtn.Attach(btnTransform);
+            playButton.HitBox = playBtn.Get<Sprite>().GetBoundingRectangle(btnTransform);
+            playBtn.Attach(playButton);
+
+            Text newGameText = new Text(Content.Load<SpriteFont>("mmBigHeader"), "New Game", Game.VIRTUAL_CENTER, Color.White);
+            newGame.Attach(newGameText);
+            Button ngButton = new Button();
+            ngButton.ButtonPress += OnNewGameButtonPressed;
+            ngButton.HitBox = newGameText.GetHitBox();
+            newGame.Attach(ngButton);
         }
 
         public void OnPlayButtonPressed(object e, EventArgs args)
+        {
+            MyGame actualGamePoggers = new MyGame(Game);
+            Game.ChangeScreen(ref actualGamePoggers);
+        }
+
+        public void OnNewGameButtonPressed(object e, EventArgs args)
         {
             MyGame actualGamePoggers = new MyGame(Game);
             Game.ChangeScreen(ref actualGamePoggers);

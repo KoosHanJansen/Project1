@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 
 namespace Project1
 {
@@ -23,6 +24,16 @@ namespace Project1
             this.text = text;
             this.position = position;
             this.color = color;
+        }
+
+        public RectangleF GetHitBox()
+        {
+            if (font == null)
+                return new RectangleF(0,0,100,100);
+
+            Vector2 size = font.MeasureString(text);
+
+            return new RectangleF(position.X, position.Y, size.X, size.Y); ;
         }
     }
 }
