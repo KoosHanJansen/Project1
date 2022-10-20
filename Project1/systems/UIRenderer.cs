@@ -4,7 +4,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Sprites;
-using Project1.libs;
 
 namespace Project1
 {
@@ -37,7 +36,7 @@ namespace Project1
                 Transform2 transform = transformMapper.Get(entity);
                 Sprite sprite = spriteMapper.Get(entity);
 
-                spriteBatch.Draw(sprite, transform);
+                spriteBatch.Draw(sprite, transform);               
             }
 
             spriteBatch.End();

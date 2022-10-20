@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Xml;
 
@@ -31,6 +30,15 @@ namespace Project1
         };
 
         private GameSettings gameSettings;
+
+        public bool VSync { get { return gameSettings.vsync; } set { gameSettings.vsync = value; } }
+        public Vector2 Resolution { get { return new Vector2(gameSettings.w, gameSettings.h); } set { gameSettings.w = (int)value.X; gameSettings.h = (int)value.Y; } }
+        public bool Fullscreen { get { return gameSettings.fullscreen; } set { gameSettings.fullscreen = value; } }
+        public bool Borderless { get { return gameSettings.borderless; } set { gameSettings.borderless = value; } }
+        public float MasterVolume { get { return gameSettings.masterVolume; } set { gameSettings.masterVolume = value; } }
+        public float MusicVolume { get { return gameSettings.musicVolume; } set { gameSettings.musicVolume = value; } }
+        public float AmbientVolume { get { return gameSettings.ambientVolume; } set { gameSettings.ambientVolume = value; } }
+        public float SfxVolume { get { return gameSettings.sfxVolume; } set { gameSettings.sfxVolume = value; } }
 
         public Settings(GraphicsDeviceManager graphics, GameWindow window)
         {
@@ -190,43 +198,6 @@ namespace Project1
             writer.WriteEndDocument();
             writer.Flush();
             writer.Close();
-        }
-
-        public void SetResolution(int w, int h)
-        {
-            gameSettings.w = w;
-            gameSettings.h = h;
-        }
-
-        public void SetVsync(bool vsync)
-        {
-            gameSettings.vsync = vsync;
-        }
-
-        public void SetWindow(bool fullscreen, bool borderless)
-        {
-            gameSettings.fullscreen = fullscreen;
-            gameSettings.borderless = borderless;
-        }
-
-        public void SetMasterVolume(float volume)
-        {
-            gameSettings.masterVolume = volume;
-        }
-
-        public void SetMusicVolume(float volume)
-        {
-            gameSettings.musicVolume = volume;
-        }
-
-        public void SetAmbientVolume(float volume)
-        {
-            gameSettings.ambientVolume = volume;
-        }
-
-        public void SetSfxVolume(float volume)
-        {
-            gameSettings.sfxVolume = volume;
         }
     }
 }

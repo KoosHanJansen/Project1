@@ -1,12 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Entities;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
-using MonoGame.Extended.ViewportAdapters;
 using Project1.libs;
-using System;
 
 namespace Project1
 {

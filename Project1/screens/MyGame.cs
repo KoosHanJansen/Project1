@@ -6,7 +6,6 @@ using MonoGame.Extended.Sprites;
 using MonoGame.Extended;
 using Microsoft.Xna.Framework.Graphics;
 using Project1.rendering;
-using System.Diagnostics;
 using Microsoft.Xna.Framework.Input;
 
 namespace Project1

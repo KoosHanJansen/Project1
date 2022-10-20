@@ -3,8 +3,6 @@
  * and heavily refactored to improve performance. */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace Project1

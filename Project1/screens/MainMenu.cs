@@ -19,6 +19,7 @@ namespace Project1
 
         private MouseInfo mouseInfo;
         private Entity playBtn;
+        private Entity newGame;
 
         public override void Initialize()
         {
@@ -33,6 +34,7 @@ namespace Project1
             uiContainer = new WorldBuilder()
                 .AddSystem(new MouseControl(camera))
                 .AddSystem(new UIRenderer(GraphicsDevice))
+                .AddSystem(new UITextRenderer())
                 .AddSystem(new UIInputHandler())
                 .Build();
 
@@ -48,6 +50,9 @@ namespace Project1
             playBtn.Attach(new Transform2(Game.VIRTUAL_CENTER));
             playBtn.Attach(playButton);
             playBtn.Attach(mouseInfo);
+
+            //Text test
+            newGame = uiContainer.CreateEntity();
         }
 
         public MainMenu(Game1 game) : base(game) { }
@@ -56,6 +61,7 @@ namespace Project1
         {
             base.LoadContent();
             playBtn.Attach(new Sprite(Content.Load<Texture2D>("StartGame")));
+            newGame.Attach(new Text(Content.Load<SpriteFont>("mmBigHeader"), "New Game", Game.VIRTUAL_CENTER, Color.White));
         }
 
         public void OnPlayButtonPressed(object e, EventArgs args)
