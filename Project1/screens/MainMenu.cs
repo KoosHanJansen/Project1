@@ -46,7 +46,6 @@ namespace Project1
             playBtn = uiContainer.CreateEntity();
             playBtn.Attach(mouseInfo);
 
-            //Text test
             newGame = uiContainer.CreateEntity();
             newGame.Attach(mouseInfo);
         }
@@ -66,7 +65,7 @@ namespace Project1
             playButton.HitBox = playBtn.Get<Sprite>().GetBoundingRectangle(btnTransform);
             playBtn.Attach(playButton);
 
-            Text newGameText = new Text(Content.Load<SpriteFont>("mmBigHeader"), "New Game", Game.VIRTUAL_CENTER, Color.White);
+            Text newGameText = new Text(Content.Load<SpriteFont>("mmBigHeader"), "New Game", new Vector2(50, 450), Color.White);
             newGame.Attach(newGameText);
             Button ngButton = new Button();
             ngButton.ButtonPress += OnNewGameButtonPressed;

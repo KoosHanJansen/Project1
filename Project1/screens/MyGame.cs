@@ -7,6 +7,7 @@ using MonoGame.Extended;
 using Microsoft.Xna.Framework.Graphics;
 using Project1.rendering;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
 
 namespace Project1
 {
@@ -98,16 +99,16 @@ namespace Project1
         public override void Update(GameTime gameTime)
         {
             camera.LookAt(player.Get<Transform2>().Position);
-            
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+
+            camera.MaximumZoom = 4;
+            camera.MinimumZoom = 0.1f;
+
+            if (mouseInfo.Scrolled())
             {
-                camera.ZoomIn(0.1f);
+                camera.ZoomIn(mouseInfo.ScrollWheel() / 1200f);
+                Debug.WriteLine("Scrolled");
             }
-            
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-            {
-                camera.ZoomOut(0.1f);
-            }
+                
 
             world.Update(gameTime);
             ChunkRenderer.UpdateTree();

@@ -12,5 +12,19 @@ namespace Project1
         public bool middleButton;
 
         public int scrollWheel;
+        private int lastScroll = 0;
+
+        public bool Scrolled()
+        {
+            return lastScroll != scrollWheel;
+        }
+
+        public int ScrollWheel()
+        {
+            int value = scrollWheel - lastScroll;
+            lastScroll = scrollWheel;
+            
+            return value;
+        }
     }
 }
