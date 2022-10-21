@@ -30,17 +30,20 @@ namespace Project1
                 Button button = buttonMapper.Get(entity);
                 MouseInfo mouse = mouseInfoMapper.Get(entity);
 
-                if (mouse.leftButton)
-                {
-                    RectangleF hitBox = button.HitBox;
+                RectangleF hitBox = button.HitBox;
 
-                    if (hitBox.Contains(mouse.localPosition))
+                if (hitBox.Contains(mouse.localPosition))
+                {
+                    if (mouse.leftButton)
                     {
                         button.OnButtonPress();
+                        Debug.WriteLine("UI: " + mouse.localPosition.ToString());
                     }
 
-                    Debug.WriteLine("UI: " + mouse.localPosition.ToString());
+                    button.OnMouseOver();
                 }
+                else
+                    button.OnMouseExit();
             }
         }
     }

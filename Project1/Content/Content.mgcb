@@ -27,6 +27,13 @@
 /processorParam:TextureFormat=Compressed
 /build:mmBigHeader.spritefont
 
+#begin mmSmallHeader.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:mmSmallHeader.spritefont
+
 #begin Splash.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -38,18 +45,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Splash.png
-
-#begin StartGame.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:StartGame.png
 
 #begin TestPNG64x64.png
 /importer:TextureImporter

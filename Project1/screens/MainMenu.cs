@@ -6,6 +6,7 @@ using MonoGame.Extended.Sprites;
 using MonoGame.Extended;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
 
 namespace Project1
 {
@@ -18,8 +19,8 @@ namespace Project1
         private World uiContainer;
 
         private MouseInfo mouseInfo;
-        private Entity playBtn;
         private Entity newGame;
+        private Entity settings;
 
         public override void Initialize()
         {
@@ -43,11 +44,11 @@ namespace Project1
 
             mouseInfo = new MouseInfo();
 
-            playBtn = uiContainer.CreateEntity();
-            playBtn.Attach(mouseInfo);
-
             newGame = uiContainer.CreateEntity();
             newGame.Attach(mouseInfo);
+
+            settings = uiContainer.CreateEntity();
+            settings.Attach(mouseInfo);
         }
 
         public MainMenu(Game1 game) : base(game) { }
@@ -55,31 +56,38 @@ namespace Project1
         public override void LoadContent()
         {
             base.LoadContent();
-            //Play Button
-            playBtn.Attach(new Sprite(Content.Load<Texture2D>("StartGame")));
+            
+            //Start Game 
+            Text startGameText = new Text(Content.Load<SpriteFont>("mmBigHeader"), "Start Game", new Vector2(50, 425), Color.White);
+            newGame.Attach(startGameText);
+            Button sgButton = new Button();
+            sgButton.ButtonPress += OnStartGameButtonPressed;
+            sgButton.MouseOver += delegate (object e, EventArgs args) { OnMouseOverButton(e, args, newGame); };
+            sgButton.MouseExit += delegate (object e, EventArgs args) { OnMouseExitButton(e, args, newGame); };
+            sgButton.HitBox = startGameText.GetHitBox();
+            newGame.Attach(sgButton);
 
-            Transform2 btnTransform = new Transform2(Game.VIRTUAL_CENTER);
-            Button playButton = new Button();
-            playButton.ButtonPress += OnPlayButtonPressed;
-            playBtn.Attach(btnTransform);
-            playButton.HitBox = playBtn.Get<Sprite>().GetBoundingRectangle(btnTransform);
-            playBtn.Attach(playButton);
-
-            Text newGameText = new Text(Content.Load<SpriteFont>("mmBigHeader"), "New Game", new Vector2(50, 450), Color.White);
-            newGame.Attach(newGameText);
-            Button ngButton = new Button();
-            ngButton.ButtonPress += OnNewGameButtonPressed;
-            ngButton.HitBox = newGameText.GetHitBox();
-            newGame.Attach(ngButton);
+            //Settings
+            Text settingsText = new Text(Content.Load<SpriteFont>("mmSmallHeader"), "Settings", new Vector2(50, 550), Color.White);
+            settings.Attach(settingsText);
+            Button settingsButton = new Button();
+            settingsButton.MouseOver += delegate (object e, EventArgs args) { OnMouseOverButton(e, args, settings); };
+            settingsButton.MouseExit += delegate (object e, EventArgs args) { OnMouseExitButton(e, args, settings); };
+            settingsButton.HitBox = settingsText.GetHitBox();
+            settings.Attach(settingsButton);
         }
 
-        public void OnPlayButtonPressed(object e, EventArgs args)
+        public void OnMouseExitButton(object e, EventArgs args, Entity entity)
         {
-            MyGame actualGamePoggers = new MyGame(Game);
-            Game.ChangeScreen(ref actualGamePoggers);
+            entity.Get<Text>().color = Color.White;
         }
 
-        public void OnNewGameButtonPressed(object e, EventArgs args)
+        public void OnMouseOverButton(object e, EventArgs args, Entity entity)
+        {
+            entity.Get<Text>().color = Color.Red;
+        }
+
+        public void OnStartGameButtonPressed(object e, EventArgs args)
         {
             MyGame actualGamePoggers = new MyGame(Game);
             Game.ChangeScreen(ref actualGamePoggers);

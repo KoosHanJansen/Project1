@@ -74,7 +74,7 @@ namespace Project1
             mSettings.density = 0.55f;
             mSettings.scale = 20.0f;
             mSettings.frequency = 1.0f;
-
+                
             map.Settings = mSettings;
             mapData = map.GenerateMap();
 
@@ -104,10 +104,7 @@ namespace Project1
             camera.MinimumZoom = 0.1f;
 
             if (mouseInfo.Scrolled())
-            {
                 camera.ZoomIn(mouseInfo.ScrollWheel() / 1200f);
-                Debug.WriteLine("Scrolled");
-            }
                 
 
             world.Update(gameTime);
