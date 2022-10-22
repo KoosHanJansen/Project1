@@ -73,6 +73,18 @@ namespace Project1.rendering
             return null;
         }
 
+        public Color GetBlockAt(Vector2 point)
+        {
+            QuadTree chunk = GetChunkAt(point);
+
+            if (chunk == null)
+                return Color.White;
+
+            Vector2 pointInData = new Vector2(MathF.Floor(point.X / cellSize), MathF.Floor(point.Y / cellSize));
+
+            return chunk.mapData[(int)pointInData.Y, (int)pointInData.X];
+        }
+
         public bool PlaceBlockAt(Vector2 point, Color block)
         {
             QuadTree chunk = GetChunkAt(point);

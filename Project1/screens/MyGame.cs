@@ -30,10 +30,11 @@ namespace Project1
             base.Initialize();
 
             PlayerInputHandler piHandler = new PlayerInputHandler();
+            Movement movement = new Movement();
 
             world = new WorldBuilder()
                 .AddSystem(new ComponentRenderer(GraphicsDevice))
-                .AddSystem(new Movement())
+                .AddSystem(movement)
                 .AddSystem(new PlayerControl())
                 .AddSystem(piHandler)
                 .Build();
@@ -71,6 +72,7 @@ namespace Project1
 
             ChunkRenderer = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 1024, mapData, 6);
             piHandler.SetMap(ChunkRenderer);
+            movement.SetMap(ChunkRenderer);
         }
 
         public MyGame(Game1 game) : base(game) { }
@@ -84,7 +86,7 @@ namespace Project1
         public override void LoadContent()
         {
             base.LoadContent();
-            player.Attach(new Sprite(Content.Load<Texture2D>("TestPNG64x64")));
+            player.Attach(new Sprite(Content.Load<Texture2D>("smol_einhorn")));
         }
 
         public override void Update(GameTime gameTime)
