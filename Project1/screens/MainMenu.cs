@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Entities;
-using MonoGame.Extended.Sprites;
 using MonoGame.Extended;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -13,27 +12,23 @@ namespace Project1
     class MainMenu : GameScreen
     {
         private new Game1 Game => (Game1)base.Game;
-        private OrthographicCamera camera;
 
         private World world;
         private World uiContainer;
 
-        private MouseInfo mouseInfo;
-        private Entity newGame;
+        private Entity startGame;
         private Entity settings;
+        private Entity inputBox;
 
         public override void Initialize()
         {
             base.Initialize();
 
-            camera = new OrthographicCamera(Game1.viewportAdapter);
-
             world = new WorldBuilder()
-                .AddSystem(new ComponentRenderer(GraphicsDevice, camera))
+                .AddSystem(new ComponentRenderer(GraphicsDevice))
                 .Build();
 
             uiContainer = new WorldBuilder()
-                .AddSystem(new MouseControl(camera))
                 .AddSystem(new UIRenderer(GraphicsDevice))
                 .AddSystem(new UITextRenderer())
                 .AddSystem(new UIInputHandler())
@@ -42,13 +37,13 @@ namespace Project1
             Game.Components.Add(world);
             Game.Components.Add(uiContainer);
 
-            mouseInfo = new MouseInfo();
-
-            newGame = uiContainer.CreateEntity();
-            newGame.Attach(mouseInfo);
+            startGame = uiContainer.CreateEntity();
 
             settings = uiContainer.CreateEntity();
-            settings.Attach(mouseInfo);
+
+            inputBox = uiContainer.CreateEntity();
+
+            inputBox.Attach(new InputBox(new RectangleF(0,0,500,100)));
         }
 
         public MainMenu(Game1 game) : base(game) { }
@@ -59,32 +54,45 @@ namespace Project1
             
             //Start Game 
             Text startGameText = new Text(Content.Load<SpriteFont>("mmBigHeader"), "Start Game", new Vector2(50, 425), Color.White);
-            newGame.Attach(startGameText);
+            startGame.Attach(startGameText);
             Button sgButton = new Button();
             sgButton.ButtonPress += OnStartGameButtonPressed;
-            sgButton.MouseOver += delegate (object e, EventArgs args) { OnMouseOverButton(e, args, newGame); };
-            sgButton.MouseExit += delegate (object e, EventArgs args) { OnMouseExitButton(e, args, newGame); };
+            sgButton.MouseOver += delegate (object e, EventArgs args) { OnMouseOverButton(e, args, startGameText); };
+            sgButton.MouseExit += delegate (object e, EventArgs args) { OnMouseExitButton(e, args, startGameText); };
             sgButton.HitBox = startGameText.GetHitBox();
-            newGame.Attach(sgButton);
+            startGame.Attach(sgButton);
 
             //Settings
             Text settingsText = new Text(Content.Load<SpriteFont>("mmSmallHeader"), "Settings", new Vector2(50, 550), Color.White);
             settings.Attach(settingsText);
             Button settingsButton = new Button();
-            settingsButton.MouseOver += delegate (object e, EventArgs args) { OnMouseOverButton(e, args, settings); };
-            settingsButton.MouseExit += delegate (object e, EventArgs args) { OnMouseExitButton(e, args, settings); };
+            settingsButton.MouseOver += delegate (object e, EventArgs args) { OnMouseOverButton(e, args, settingsText); };
+            settingsButton.MouseExit += delegate (object e, EventArgs args) { OnMouseExitButton(e, args, settingsText); };
             settingsButton.HitBox = settingsText.GetHitBox();
             settings.Attach(settingsButton);
+
+            //Inputbox
+            Text inputBoxText = new Text(Content.Load<SpriteFont>("mmSmallHeader"), "", Game.VIRTUAL_CENTER, Color.White);
+            inputBox.Attach(inputBoxText);
+            inputBox.Get<InputBox>().Input += delegate (object e, TextInputEventArgs args) { OnInputTextBox(e, args, inputBoxText); };
         }
 
-        public void OnMouseExitButton(object e, EventArgs args, Entity entity)
+        public void OnInputTextBox(object e, TextInputEventArgs args, Text text)
         {
-            entity.Get<Text>().color = Color.White;
+            Keys k = args.Key;
+            char c = args.Character;
+         
+            text.text = text.text + c;
         }
 
-        public void OnMouseOverButton(object e, EventArgs args, Entity entity)
+        public void OnMouseExitButton(object e, EventArgs args, Text text)
         {
-            entity.Get<Text>().color = Color.Red;
+            text.color = Color.White;
+        }
+
+        public void OnMouseOverButton(object e, EventArgs args, Text text)
+        {
+            text.color = Color.Red;
         }
 
         public void OnStartGameButtonPressed(object e, EventArgs args)

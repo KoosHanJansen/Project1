@@ -11,18 +11,13 @@ namespace Project1
     {
         private SpriteBatch spriteBatch;
 
-        private OrthographicCamera camera;
-
         private ComponentMapper<Sprite> spriteMapper;
         private ComponentMapper<Transform2> transformMapper;
 
-        public ComponentRenderer(GraphicsDevice graphicsDevice, OrthographicCamera camera)
+        public ComponentRenderer(GraphicsDevice graphicsDevice)
             : base(Aspect.All(typeof(Sprite), typeof(Transform2)))
         {
             spriteBatch = new SpriteBatch(graphicsDevice);
-
-            if (camera != null)
-                this.camera = camera;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -33,7 +28,7 @@ namespace Project1
 
         public override void Draw(GameTime gameTime)
         {
-            Matrix cam = camera.GetViewMatrix(Vector2.One);
+            Matrix cam = Game1.camera.GetViewMatrix(Vector2.One);
 
             spriteBatch.Begin(transformMatrix: cam);
             

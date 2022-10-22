@@ -2,7 +2,7 @@
 
 namespace Project1
 {
-    class MouseInfo
+    public class MouseInfo
     {
         public Vector2 position;
         public Vector2 localPosition;

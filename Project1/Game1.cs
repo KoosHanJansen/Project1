@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using Project1.libs;
@@ -12,6 +13,8 @@ namespace Project1
         public static GraphicsDeviceManager graphics;
         public static GameViewport viewportAdapter;
         public static Time time;
+        public static MouseInfo mouseInfo;
+        public static OrthographicCamera camera;
         public SpriteBatch SpriteBatch;
 
         private Settings gameSettings;
@@ -32,6 +35,8 @@ namespace Project1
             graphics = new GraphicsDeviceManager(this);
             viewportAdapter = new GameViewport((int)VIRTUAL_WIDTH, (int)VIRTUAL_HEIGHT, GraphicsDevice);
             time = new Time();
+            mouseInfo = new MouseInfo();
+            camera = new OrthographicCamera(viewportAdapter);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
@@ -72,6 +77,24 @@ namespace Project1
 
             base.Update(gameTime);
             time.Update();
+            UpdateMouseInfo();
+        }
+
+        protected void UpdateMouseInfo()
+        {
+            MouseState mouseState = Mouse.GetState();
+            Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y);
+
+            Matrix uiMatrix = viewportAdapter.GetScaleMatrix();
+
+            mouseInfo.position = Vector2.Transform(mousePos, camera.GetInverseViewMatrix());
+            mouseInfo.localPosition = Vector2.Transform(mousePos, Matrix.Invert(uiMatrix));
+
+            mouseInfo.leftButton = mouseState.LeftButton == ButtonState.Pressed;
+            mouseInfo.rightButton = mouseState.RightButton == ButtonState.Pressed;
+            mouseInfo.middleButton = mouseState.MiddleButton == ButtonState.Pressed;
+
+            mouseInfo.scrollWheel = mouseState.ScrollWheelValue;
         }
 
         protected override void Draw(GameTime gameTime)

@@ -10,17 +10,15 @@ namespace Project1
     class UIInputHandler : EntityUpdateSystem
     {
         private ComponentMapper<Button> buttonMapper;
-        private ComponentMapper<MouseInfo> mouseInfoMapper;
 
         public UIInputHandler()
-            : base (Aspect.All(typeof(Button), typeof(MouseInfo)))
+            : base (Aspect.All(typeof(Button)))
         {
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
             buttonMapper = mapperService.GetMapper<Button>();
-            mouseInfoMapper = mapperService.GetMapper<MouseInfo>();
         }
 
         public override void Update(GameTime gameTime)
@@ -28,16 +26,15 @@ namespace Project1
             foreach (var entity in ActiveEntities)
             {
                 Button button = buttonMapper.Get(entity);
-                MouseInfo mouse = mouseInfoMapper.Get(entity);
 
                 RectangleF hitBox = button.HitBox;
 
-                if (hitBox.Contains(mouse.localPosition))
+                if (hitBox.Contains(Game1.mouseInfo.localPosition))
                 {
-                    if (mouse.leftButton)
+                    if (Game1.mouseInfo.leftButton)
                     {
                         button.OnButtonPress();
-                        Debug.WriteLine("UI: " + mouse.localPosition.ToString());
+                        Debug.WriteLine("UI: " + Game1.mouseInfo.localPosition.ToString());
                     }
 
                     button.OnMouseOver();

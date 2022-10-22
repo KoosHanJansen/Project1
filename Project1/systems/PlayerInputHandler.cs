@@ -13,7 +13,6 @@ namespace Project1
 
         private ComponentMapper<Velocity> velocityMapper;
         private ComponentMapper<PlayerInput> playerInputMapper;
-        private ComponentMapper<MouseInfo> mouseInfoMapper;
 
         private readonly float PLAYER_SPEED;
         private readonly float SPRINT_MULTIPLIER;
@@ -21,7 +20,7 @@ namespace Project1
         private float globalCooldown;
 
         public PlayerInputHandler()
-            : base(Aspect.All(typeof(Velocity), typeof(PlayerInput), typeof(MouseInfo)))
+            : base(Aspect.All(typeof(Velocity), typeof(PlayerInput)))
         {
             PLAYER_SPEED = 3;
             SPRINT_MULTIPLIER = 2;
@@ -36,7 +35,6 @@ namespace Project1
         {
             velocityMapper = mapperService.GetMapper<Velocity>();
             playerInputMapper = mapperService.GetMapper<PlayerInput>();
-            mouseInfoMapper = mapperService.GetMapper<MouseInfo>();
         }
 
         public override void Update(GameTime gameTime)
@@ -45,7 +43,6 @@ namespace Project1
             {
                 PlayerInput playerInput = playerInputMapper.Get(entity);
                 Velocity velocity = velocityMapper.Get(entity);
-                MouseInfo mouse = mouseInfoMapper.Get(entity);
 
                 float hor = boolToInt(playerInput.keyRight) + -boolToInt(playerInput.keyLeft);
                 float ver = boolToInt(playerInput.keyBackwards) + -boolToInt(playerInput.keyForward);
@@ -60,24 +57,24 @@ namespace Project1
 
                 globalCooldown -= Time.deltaTime;
 
-                if (mouse.leftButton && globalCooldown < 0)
+                if (Game1.mouseInfo.leftButton && globalCooldown < 0)
                 {
-                    bool blockRemoved = map.RemoveBlockAt(mouse.position, Color.White);
+                    bool blockRemoved = map.RemoveBlockAt(Game1.mouseInfo.position, Color.White);
                     
                     if (blockRemoved)
                     {
-                        Debug.WriteLine("Player removed block: " + mouse.position.ToString());
+                        Debug.WriteLine("Player removed block: " + Game1.mouseInfo.position.ToString());
                         globalCooldown = 0.2f;
                     }
                 }
 
-                if (mouse.rightButton && globalCooldown < 0)
+                if (Game1.mouseInfo.rightButton && globalCooldown < 0)
                 {
-                    bool blockPlaced = map.PlaceBlockAt(mouse.position, Color.Brown);
+                    bool blockPlaced = map.PlaceBlockAt(Game1.mouseInfo.position, Color.Brown);
                     
                     if (blockPlaced)
                     {
-                        Debug.WriteLine("Player placed block: " + mouse.position.ToString());
+                        Debug.WriteLine("Player placed block: " + Game1.mouseInfo.position.ToString());
                         globalCooldown = 0.2f;
                     }
                 }
