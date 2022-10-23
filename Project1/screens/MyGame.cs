@@ -36,6 +36,7 @@ namespace Project1
                 .AddSystem(new ComponentRenderer(GraphicsDevice))
                 .AddSystem(movement)
                 .AddSystem(new PlayerControl())
+                .AddSystem(new ChunkRenderer())
                 .AddSystem(piHandler)
                 .Build();
 

@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
-using MonoGame.Extended.Sprites;
 using System;
 
 namespace Project1.rendering
@@ -123,15 +121,44 @@ namespace Project1.rendering
 
         public void UpdateChunk()
         {
-            chunk.Destroy();
-            CreateChunk();
+            Chunk c = chunk.Get<Chunk>();
+            c.isLoaded = false;
+            c.blocks = GetChunkBlocks();
         }
 
         public void CreateChunk()
         {
             chunk = world.CreateEntity();
-            chunk.Attach(new Transform2(new Vector2((position.X * cellSize) + 256, (position.Y * cellSize) + 256)));
-            chunk.Attach(new Sprite(CreateChunkTexture()));
+
+            Chunk c = new Chunk();
+
+            c.Position = new Vector2((position.X * cellSize) + 256, (position.Y * cellSize) + 256);
+            c.LocalPosition = new Vector2(position.X, position.Y);
+            c.Size = new Vector2((int)size * (int)cellSize, (int)size * (int)cellSize);
+            c.blocks = GetChunkBlocks();
+            c.cellSize = (int)cellSize;
+
+            chunk.Attach(c);
+        }
+
+        private Block[,] GetChunkBlocks()
+        {
+            Block[,] result = new Block[(int)size, (int)size];
+
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    Block block = new Block();
+                    block.Position = new Vector2(x, y);
+                    block.LocalPosition = new Vector2(y, x);
+                    block.Color = mapData[(int)position.Y + y, (int)position.X + x];
+
+                    result[y, x] = block;
+                }
+            }
+
+            return result;
         }
 
         public void UpdateTree()
@@ -177,39 +204,6 @@ namespace Project1.rendering
             branches[2] = new QuadTree(world, new Vector2(position.X, position.Y + halfSize), this.target, halfSize, mapData, this.depth - 1);
             //Bot right
             branches[3] = new QuadTree(world, new Vector2(position.X + halfSize, position.Y + halfSize), this.target, halfSize, mapData, this.depth - 1);
-        }
-
-        private Texture2D CreateChunkTexture()
-        {
-            if (mapData == null)
-                return null;
-
-            Texture2D ct = new Texture2D(Game1.graphics.GraphicsDevice, (int)size * (int)cellSize, (int)size * (int)cellSize);
-            Color[] data = new Color[ct.Width * ct.Height];
-
-            int index = 0;
-
-            for (int y = 0; y < ct.Height; y++)
-            {
-                int iy = (int)position.Y + (int)MathF.Floor(y / cellSize);
-                for (int x = 0; x < ct.Width; x++)
-                {
-                    int ix = (int)position.X + (int)MathF.Floor(x / cellSize);
-
-                    if (mapData[iy, ix].Equals(Color.Black))
-                        data[index] = Color.White;
-                    else if (mapData[iy, ix].Equals(Color.White))
-                        data[index] = Color.Transparent;
-                    else
-                        data[index] = mapData[iy, ix];
-
-                    index++;
-                }
-            }
-
-            ct.SetData(data);
-
-            return ct;
         }
 
         private void UnloadBranches()
