@@ -73,16 +73,19 @@ namespace Project1
 
             //Inputbox
             Text inputBoxText = new Text(Content.Load<SpriteFont>("mmSmallHeader"), "", Game.VIRTUAL_CENTER, Color.White);
-            inputBox.Attach(inputBoxText);
-            inputBox.Get<InputBox>().Input += delegate (object e, TextInputEventArgs args) { OnInputTextBox(e, args, inputBoxText); };
+            inputBox.Attach(inputBoxText); 
+            Game.Window.TextInput += delegate (object e, TextInputEventArgs args) { OnInputTextBox(e, args, inputBoxText); };
         }
 
-        public void OnInputTextBox(object e, TextInputEventArgs args, Text text)
+        public void OnInputTextBox(object e, TextInputEventArgs args, Text label)
         {
             Keys k = args.Key;
             char c = args.Character;
-         
-            text.text = text.text + c;
+
+            if (!k.Equals(Keys.Back) && label.font.Characters.Contains(c))
+                label.text = label.text + c;
+            else if (label.text.Length > 0 && k.Equals(Keys.Back))
+                label.text = label.text.Remove(label.text.Length - 1, 1);
         }
 
         public void OnMouseExitButton(object e, EventArgs args, Text text)

@@ -19,7 +19,7 @@ namespace Project1
 
         private Settings gameSettings;
         private readonly ScreenManager screenManager;
-
+        
         public readonly float VIRTUAL_WIDTH;
         public readonly float VIRTUAL_HEIGHT;
 
