@@ -3,7 +3,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using Project1.rendering;
-using System.Runtime.InteropServices;
 
 namespace Project1
 {
@@ -46,20 +45,25 @@ namespace Project1
 
         private Vector2 ContinuousCollisionDetection(Vector2 pos, Vector2 vel)
         {
-            Vector2 position, unit;
+            Vector2 unit;
 
-            position = new Vector2(pos.X, pos.Y);
-            
             for (int length = 0; length < vel.Length(); length++)
             {
                 unit = vel / vel.Length();
-                unit = unit * length;
 
-                Vector2 check = position + unit;
+                Vector2 check = pos + unit;
 
                 if (SpotFree(check))
                 {
-                    pos = check;
+                    pos += unit;
+                } 
+                else if (SpotFree(new Vector2(pos.X + unit.X, pos.Y)))
+                {
+                    pos.X += unit.X;
+                }
+                else if (SpotFree(new Vector2(pos.X, pos.Y + unit.Y)))
+                {
+                    pos.Y += unit.Y;
                 }
             }
 
