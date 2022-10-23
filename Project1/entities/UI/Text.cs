@@ -4,7 +4,7 @@ using MonoGame.Extended;
 
 namespace Project1
 {
-    class Text
+    public class Text
     {
         public SpriteFont font = null;
         public string text = "";
