@@ -38,9 +38,7 @@ namespace Project1
             Game.Components.Add(uiContainer);
 
             startGame = uiContainer.CreateEntity();
-
             settings = uiContainer.CreateEntity();
-
             inputBox = uiContainer.CreateEntity();
 
             inputBox.Attach(new InputBox(new RectangleF(Game.VIRTUAL_CENTER.X, Game.VIRTUAL_CENTER.Y, 500, 100)));
@@ -102,14 +100,11 @@ namespace Project1
 
         public override void Update(GameTime gameTime)
         {
-            world.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
             Game.GraphicsDevice.Clear(Color.Black);
-            world.Draw(gameTime);
-            uiContainer.Draw(gameTime);
         }
 
         public override void UnloadContent()

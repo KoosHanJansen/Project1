@@ -75,9 +75,9 @@ namespace Project1
             if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt) && Keyboard.GetState().IsKeyDown(Keys.Enter))
                 graphics.ToggleFullScreen();
 
-            base.Update(gameTime);
             time.Update();
             UpdateMouseInfo();
+            base.Update(gameTime);
         }
 
         protected void UpdateMouseInfo()

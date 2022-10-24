@@ -100,16 +100,12 @@ namespace Project1
             if (Game1.mouseInfo.Scrolled())
                 Game1.camera.ZoomIn(Game1.mouseInfo.ScrollWheel() / 1200f);
                 
-
-            world.Update(gameTime);
             ChunkRenderer.UpdateTree();
         }
 
         public override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            world.Draw(gameTime);
-            uiContainer.Draw(gameTime);
         }
 
         public override void UnloadContent()

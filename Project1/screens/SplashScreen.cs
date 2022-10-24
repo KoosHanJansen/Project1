@@ -42,8 +42,6 @@ namespace Project1
 
         public override void Update(GameTime gameTime)
         {
-            world.Update(gameTime);
-
             splashTime = MathF.Max(0, splashTime - gameTime.GetElapsedSeconds());
 
             if (splashTime == 0)
@@ -56,7 +54,6 @@ namespace Project1
         public override void Draw(GameTime gameTime)
         {
             Game.GraphicsDevice.Clear(Color.Black);
-            world.Draw(gameTime);
         }
 
         public override void UnloadContent()
