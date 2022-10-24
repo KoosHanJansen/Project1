@@ -89,6 +89,13 @@ namespace Project1
 
         public void OnStartGameButtonPressed(object e, EventArgs args)
         {
+            string levelName = inputBox.Get<Text>().text;
+
+            if (levelName.Equals(""))
+                return;
+            else
+                Debug.WriteLine(levelName);
+
             MyGame actualGamePoggers = new MyGame(Game);
             Game.ChangeScreen(ref actualGamePoggers);
         }
