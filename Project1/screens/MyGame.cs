@@ -94,7 +94,7 @@ namespace Project1
         {
             Game1.camera.LookAt(player.Get<Transform2>().Position);
 
-            Game1.camera.MaximumZoom = 4;
+            Game1.camera.MaximumZoom = 8;
             Game1.camera.MinimumZoom = 0.1f;
 
             if (Game1.mouseInfo.Scrolled())
