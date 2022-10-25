@@ -30,7 +30,7 @@ namespace Project1
         {
             Matrix cam = Game1.camera.GetViewMatrix(Vector2.One);
 
-            spriteBatch.Begin(transformMatrix: cam, samplerState: SamplerState.PointWrap);
+            spriteBatch.Begin(transformMatrix: cam, samplerState: SamplerState.PointClamp);
             
             foreach(var entity in ActiveEntities)
             {

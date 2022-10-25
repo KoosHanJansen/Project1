@@ -23,7 +23,7 @@ namespace Project1
 
         private Entity player;
 
-        private QuadTree ChunkRenderer;
+        private QuadTree chunkTree;
 
         public override void Initialize()
         {
@@ -71,9 +71,9 @@ namespace Project1
             map.Settings = mSettings;
             mapData = map.GenerateMap();
 
-            ChunkRenderer = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 1024, mapData, 6);
-            piHandler.SetMap(ChunkRenderer);
-            movement.SetMap(ChunkRenderer);
+            chunkTree = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 1024, mapData, 6);
+            piHandler.SetMap(chunkTree);
+            movement.SetMap(chunkTree);
         }
 
         public MyGame(Game1 game) : base(game) { }
@@ -100,7 +100,7 @@ namespace Project1
             if (Game1.mouseInfo.Scrolled())
                 Game1.camera.ZoomIn(Game1.mouseInfo.ScrollWheel() / 1200f);
                 
-            ChunkRenderer.UpdateTree();
+            chunkTree.UpdateTree();
         }
 
         public override void Draw(GameTime gameTime)
