@@ -26,6 +26,11 @@ namespace Project1
             borderColor = new Color(174, 0, 255);
         }
 
+        public Color[,] LoadMap(string path)
+        {
+            return null;
+        }
+
         public Color[,] GenerateMap()
         {
             if (this.settings.Equals(default(MapSettings)))
