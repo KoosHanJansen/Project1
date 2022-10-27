@@ -26,6 +26,11 @@ namespace Project1
             borderColor = new Color(174, 0, 255);
         }
 
+        public bool Exists(string path)
+        {
+            return false;
+        }
+
         public Color[,] LoadMap(string path)
         {
             return null;
