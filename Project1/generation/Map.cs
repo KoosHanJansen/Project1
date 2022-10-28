@@ -26,7 +26,7 @@ namespace Project1
             borderColor = new Color(174, 0, 255);
         }
 
-        public bool Exists(string path)
+        public bool Exists(string map)
         {
             return false;
         }
