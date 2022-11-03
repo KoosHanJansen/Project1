@@ -7,9 +7,6 @@ namespace Project1
 {
     class Settings
     {
-        private static string SETTINGS_DIRECTORY;
-        private static string SETTINGS_FILE_PATH;
-
         private readonly int MAX_POINTS;
 
         private GraphicsDeviceManager graphics;
@@ -45,21 +42,18 @@ namespace Project1
             this.graphics = graphics;
             this.window = window;
 
-            SETTINGS_DIRECTORY = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Saved Games\\MyGame";
-            SETTINGS_FILE_PATH = SETTINGS_DIRECTORY + "\\settings.xml";
-
             MAX_POINTS = 4;
 
-            bool pathExists = Directory.Exists(SETTINGS_DIRECTORY);
+            bool pathExists = FileLocations.Exists(FileLocations.MYGAME_DIRECTORY);
 
             if (!pathExists)
             {
-                Directory.CreateDirectory(SETTINGS_DIRECTORY);
+                Directory.CreateDirectory(FileLocations.MYGAME_DIRECTORY);
                 CreateNewSettingFile();
             }
             else
             {
-                if (File.Exists(SETTINGS_FILE_PATH))
+                if (File.Exists(FileLocations.SETTINGS_FILE))
                     LoadSettings();
                 else
                     CreateNewSettingFile();
@@ -90,7 +84,7 @@ namespace Project1
         private void LoadSettings()
         {
             gameSettings = new GameSettings();
-            XmlTextReader reader = new XmlTextReader(SETTINGS_FILE_PATH);
+            XmlTextReader reader = new XmlTextReader(FileLocations.SETTINGS_FILE);
 
             int pointTest = 0;
 
@@ -156,7 +150,7 @@ namespace Project1
         private void SaveSettings(GameSettings gs)
         {
             //Create settings.xml file in SETTINGS_PATH
-            XmlTextWriter writer = new XmlTextWriter(SETTINGS_FILE_PATH, null);
+            XmlTextWriter writer = new XmlTextWriter(FileLocations.SETTINGS_FILE, null);
             
             //Make it show proper formatting (easier debugging)
             writer.Formatting = Formatting.Indented;

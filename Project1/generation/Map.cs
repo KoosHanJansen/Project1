@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.IO;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Project1
 {
@@ -26,14 +29,35 @@ namespace Project1
             borderColor = new Color(174, 0, 255);
         }
 
-        public bool Exists(string map)
+        public unsafe Color[,] LoadMap(string name)
         {
-            return false;
+            string path = FileLocations.SAVES_DIRECTORY + "\\" + name + ".dat";
+
+            if (!FileLocations.Exists(path))
+                return null;
+
+            Color[,] map = new Color[settings.width, settings.height];
+
+            using (var ws = new FileStream(path, FileMode.Open))
+            {
+                fixed (void* asd = map)
+                    ws.Read(new Span<byte>(asd, map.Length * sizeof(uint)));
+            }
+
+            return map;
         }
 
-        public Color[,] LoadMap(string path)
+        public unsafe bool SaveMap(string name, Color[,] map)
         {
-            return null;
+            string path = FileLocations.SAVES_DIRECTORY + "\\" + name + ".dat";
+
+            using (var ws = new FileStream(path, FileMode.Create))
+            {
+                fixed (void* asd = map)
+                    ws.Write(new Span<byte>(asd, map.Length * sizeof(uint)));
+            }
+               
+            return true;
         }
 
         public Color[,] GenerateMap()

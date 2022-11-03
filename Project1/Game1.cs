@@ -42,6 +42,8 @@ namespace Project1
 
             screenManager = new ScreenManager();
             Components.Add(screenManager);
+
+            FileLocations.CreateDirectories();
         }
 
         public void ChangeScreen<T>(ref T screen) where T : GameScreen

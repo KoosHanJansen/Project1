@@ -67,9 +67,11 @@ namespace Project1
             mSettings.density = 0.55f;
             mSettings.scale = 20.0f;
             mSettings.frequency = 1.0f;
-                
+
             map.Settings = mSettings;
-            mapData = map.GenerateMap();
+            Color[,] levl = map.LoadMap("TestMap");//map.GenerateMap();
+            mapData = levl;
+            //map.SaveMap("TestMap", levl);
 
             chunkTree = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 1024, mapData, 6);
             piHandler.SetMap(chunkTree);
@@ -99,7 +101,13 @@ namespace Project1
 
             if (Game1.mouseInfo.Scrolled())
                 Game1.camera.ZoomIn(Game1.mouseInfo.ScrollWheel() / 1200f);
-                
+
+            if (Keyboard.GetState().IsKeyDown(Keys.F6))
+            {
+                Debug.WriteLine("Saving map");
+                map.SaveMap("TestMap", mapData);
+            }
+
             chunkTree.UpdateTree();
         }
 
