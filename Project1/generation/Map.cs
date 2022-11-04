@@ -38,10 +38,9 @@ namespace Project1
 
             Color[,] map = new Color[settings.width, settings.height];
 
-            using (var ws = new FileStream(path, FileMode.Open))
+            using (var rs = new FileStream(path, FileMode.Open))
             {
-                fixed (void* asd = map)
-                    ws.Read(new Span<byte>(asd, map.Length * sizeof(uint)));
+                FileLocations.Read(map, rs);
             }
 
             return map;
@@ -53,8 +52,7 @@ namespace Project1
 
             using (var ws = new FileStream(path, FileMode.Create))
             {
-                fixed (void* asd = map)
-                    ws.Write(new Span<byte>(asd, map.Length * sizeof(uint)));
+                FileLocations.Write(map, ws);
             }
                
             return true;

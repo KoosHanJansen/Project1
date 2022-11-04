@@ -31,7 +31,7 @@ namespace Project1
             {
                 Text text = textMapper.Get(entity);
 
-                if (text.font == null)
+                if (text.font == null || text.hide)
                     continue;
 
                 spriteBatch.DrawString(text.font, text.text, text.position, text.color);

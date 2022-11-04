@@ -89,13 +89,23 @@ namespace Project1
         {
             string levelName = inputBox.Get<Text>().text;
 
+            hideButton(startGame);
+            hideButton(settings);
+
             if (levelName.Equals(""))
                 return;
             else
                 Debug.WriteLine(levelName);
 
-            MyGame actualGamePoggers = new MyGame(Game);
-            Game.ChangeScreen(ref actualGamePoggers);
+
+            //MyGame actualGamePoggers = new MyGame(Game);
+            //Game.ChangeScreen(ref actualGamePoggers);
+        }
+
+        private void hideButton(Entity e)
+        {
+            e.Get<Text>().hide = true;
+            e.Get<Button>().Active = false;
         }
 
         public override void Update(GameTime gameTime)

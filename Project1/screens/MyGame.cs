@@ -69,9 +69,8 @@ namespace Project1
             mSettings.frequency = 1.0f;
 
             map.Settings = mSettings;
-            Color[,] levl = map.LoadMap("TestMap");//map.GenerateMap();
+            Color[,] levl = map.LoadMap("TestMap");
             mapData = levl;
-            //map.SaveMap("TestMap", levl);
 
             chunkTree = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 1024, mapData, 6);
             piHandler.SetMap(chunkTree);

@@ -10,6 +10,7 @@ namespace Project1
         public string text = "";
         public Vector2 position = Vector2.Zero;
         public Color color = Color.White;
+        public bool hide = false;
         
         /// <summary>
         /// Text for UI

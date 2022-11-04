@@ -17,6 +17,8 @@ namespace Project1
         private RectangleF hitBox;
         public RectangleF HitBox { get { return this.hitBox; } set { this.hitBox = value; } }
 
+        public bool Active = true;
+
         public virtual void OnButtonPress()
         {
             if (ButtonPress != null)

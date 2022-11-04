@@ -10,6 +10,17 @@ namespace Project1
 
         public static string SETTINGS_FILE = MYGAME_DIRECTORY + "\\settings.xml";
 
+        public static unsafe void Write<T>(T[,] source, Stream stream) where T : unmanaged
+        {
+            fixed (void* asd = source)
+                stream.Write(new Span<byte>(asd, source.Length * sizeof(T)));
+        }
+        public static unsafe bool Read<T>(T[,] source, Stream stream) where T : unmanaged
+        {
+            fixed (void* asd = source)
+                return stream.Read(new Span<byte>(asd, source.Length * sizeof(T))) != 0;
+        }
+
         public static bool Exists(string path)
         {
             return Directory.Exists(path) | File.Exists(path);

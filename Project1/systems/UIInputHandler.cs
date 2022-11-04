@@ -42,7 +42,7 @@ namespace Project1
                     }
                 }
 
-                if (button == null)
+                if (button == null || !button.Active)
                     continue;
 
                 RectangleF hitBox = button.HitBox;
