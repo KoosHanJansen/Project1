@@ -25,6 +25,16 @@ namespace Project1
 
         private QuadTree chunkTree;
 
+        private string currentSave;
+
+        public MyGame(Game1 game) : base(game) { }
+
+        public MyGame(Game1 game, string save)
+            : base(game)
+        {
+            this.currentSave = save;
+        }
+
         public override void Initialize()
         {
             base.Initialize();
@@ -48,16 +58,22 @@ namespace Project1
             Game.Components.Add(world);
             Game.Components.Add(uiContainer);
 
-            player = world.CreateEntity();
-            player.Attach(new Transform2(Game.VIRTUAL_CENTER));
-            player.Attach(new PlayerInput());
-            player.Attach(new Velocity());
-            player.Attach(new Player());
-
             map = new Map();
+            SetMapSettings();
 
+            if (FileLocations.Exists(FileLocations.SAVES_DIRECTORY + "\\" + currentSave))
+                LoadLevel();
+            else
+                LoadNewLevel();         
+            
+            chunkTree = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 1024, mapData, 6);
+            piHandler.SetMap(chunkTree);
+            movement.SetMap(chunkTree);
+        }
+
+        private void SetMapSettings()
+        {
             Map.MapSettings mSettings = new Map.MapSettings();
-
             Random r = new Random();
 
             mSettings.seed = r.Next();
@@ -69,15 +85,29 @@ namespace Project1
             mSettings.frequency = 1.0f;
 
             map.Settings = mSettings;
-            Color[,] levl = map.LoadMap("TestMap");
-            mapData = levl;
-
-            chunkTree = new QuadTree(world, Vector2.Zero, player.Get<Transform2>(), 1024, mapData, 6);
-            piHandler.SetMap(chunkTree);
-            movement.SetMap(chunkTree);
         }
 
-        public MyGame(Game1 game) : base(game) { }
+        private void LoadLevel()
+        {
+            mapData = map.LoadMap(currentSave);
+            SpawnPlayer();
+        }
+
+        private void LoadNewLevel()
+        {
+            mapData = map.GenerateMap();
+            SpawnPlayer();
+            map.SaveMap(currentSave, mapData);
+        }
+
+        private void SpawnPlayer()
+        {
+            player = world.CreateEntity();
+            player.Attach(new Transform2(map.PlayerPosition));
+            player.Attach(new PlayerInput());
+            player.Attach(new Velocity());
+            player.Attach(new Player());
+        }
 
         void OnTestButtonPress(object source, EventArgs e)
         {
@@ -104,7 +134,7 @@ namespace Project1
             if (Keyboard.GetState().IsKeyDown(Keys.F6))
             {
                 Debug.WriteLine("Saving map");
-                map.SaveMap("TestMap", mapData);
+                map.SaveMap(currentSave, mapData);
             }
 
             chunkTree.UpdateTree();

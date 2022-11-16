@@ -12,6 +12,8 @@ namespace Project1
         private Color borderColor;
         private MapSettings settings;
 
+        public Vector2 PlayerPosition;
+
         public MapSettings Settings { set { this.settings = value; } get { return this.settings; } }
 
         public struct MapSettings {
@@ -27,11 +29,12 @@ namespace Project1
         public Map()
         {    
             borderColor = new Color(174, 0, 255);
+            PlayerPosition = Vector2.Zero;
         }
 
         public unsafe Color[,] LoadMap(string name)
         {
-            string path = FileLocations.SAVES_DIRECTORY + "\\" + name + ".dat";
+            string path = FileLocations.SAVES_DIRECTORY + "\\" + name + "\\world.dat";
 
             if (!FileLocations.Exists(path))
                 return null;
@@ -43,12 +46,16 @@ namespace Project1
                 FileLocations.Read(map, rs);
             }
 
+            SetPlayerPositionSpawnPoint(map);
+
             return map;
         }
 
         public unsafe bool SaveMap(string name, Color[,] map)
         {
-            string path = FileLocations.SAVES_DIRECTORY + "\\" + name + ".dat";
+            string path = FileLocations.SAVES_DIRECTORY + "\\" + name + "\\world.dat";
+
+            Directory.CreateDirectory(FileLocations.SAVES_DIRECTORY + "\\" + name);
 
             using (var ws = new FileStream(path, FileMode.Create))
             {
@@ -98,7 +105,7 @@ namespace Project1
                 }
             }
 
-            return SetSpawnPoint(data);
+            return SetWorldSpawnPoint(data);
         }
 
         private float SpawnMask(int x, int y, int radius)
@@ -111,9 +118,24 @@ namespace Project1
             return distance < radius ? 1 : 0;
         }
 
-        private Color[,] SetSpawnPoint(Color[,] data)
+        private void SetPlayerPositionSpawnPoint(Color[,] data)
         {
-            data[settings.height / 2, settings.width / 2] = Color.Red;
+            for (int y = 0; y < data.GetLength(0); y++)
+                for (int x = 0; x < data.GetLength(1); x++)
+                {
+                    if (data[y, x] == Color.Red)
+                        PlayerPosition = new Vector2(x * 32, y * 32);
+                }
+        }
+
+        private Color[,] SetWorldSpawnPoint(Color[,] data)
+        {
+            int h = settings.height / 2;
+            int w = settings.width / 2;
+
+            data[h, w] = Color.Red;
+            PlayerPosition = new Vector2(w * 32, h * 32);
+
             return data;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace Project1
 {
@@ -29,6 +30,16 @@ namespace Project1
         public static void CreateDirectories()
         {
             Directory.CreateDirectory(SAVES_DIRECTORY);
+        }
+
+        public static string[] GetSaves()
+        {
+            string[] saves = Directory.GetDirectories(SAVES_DIRECTORY);
+
+            for (int i = 0; i < saves.Length; i++)
+                saves[i] = saves[i].Split('\\').Last();
+
+            return saves;
         }
     }
 }

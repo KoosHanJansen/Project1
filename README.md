@@ -1,2 +1,2 @@
-# Project1
-Start of a small 2D roguelike game.
+# Roguelike
+Start of a 2D roguelike sandbox game build in MonoGame.

@@ -27,6 +27,10 @@ namespace Project1
             this.color = color;
         }
 
+        /// <summary>
+        /// Hitbox for current text
+        /// </summary>
+        /// <returns>RectangleF based on the current position and size</returns>
         public RectangleF GetHitBox()
         {
             if (font == null)

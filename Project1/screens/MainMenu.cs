@@ -6,6 +6,9 @@ using MonoGame.Extended;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Project1
 {
@@ -87,19 +90,37 @@ namespace Project1
 
         public void OnStartGameButtonPressed(object e, EventArgs args)
         {
-            string levelName = inputBox.Get<Text>().text;
-
             hideButton(startGame);
             hideButton(settings);
 
-            if (levelName.Equals(""))
-                return;
-            else
-                Debug.WriteLine(levelName);
+            string[] saves = FileLocations.GetSaves();
 
+            Vector2 pos = new Vector2(Game.VIRTUAL_WIDTH / 4, 100);
 
-            //MyGame actualGamePoggers = new MyGame(Game);
+            foreach (string s in saves)
+            {
+                Entity entity = uiContainer.CreateEntity();
+                Button btn = new Button();
+                Text label = new Text(Content.Load<SpriteFont>("mmSmallHeader"), s, pos, Color.White);
+                
+                btn.ButtonPress += delegate (object e, EventArgs args) { OnSavedGameButtonPressed(e, args, label); };
+                btn.MouseOver += delegate (object e, EventArgs args) { OnMouseOverButton(e, args, label); };
+                btn.MouseExit += delegate (object e, EventArgs args) { OnMouseExitButton(e, args, label); };
+                btn.HitBox = label.GetHitBox();
+
+                entity.Attach(btn);
+                entity.Attach(label);
+                pos.Y += 150;
+            }
+
+            //MyGame actualGamePoggers = new MyGame(Game, inputBox.Get<Text>().text);
             //Game.ChangeScreen(ref actualGamePoggers);
+        }
+
+        public void OnSavedGameButtonPressed(object e, EventArgs args, Text text)
+        {
+            MyGame actualGamePoggers = new MyGame(Game, text.text);
+            Game.ChangeScreen(ref actualGamePoggers);
         }
 
         private void hideButton(Entity e)
