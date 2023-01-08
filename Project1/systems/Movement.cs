@@ -53,18 +53,11 @@ namespace Project1
 
                 Vector2 check = pos + unit;
 
-                if (SpotFree(check))
-                {
-                    pos += unit;
-                } 
-                else if (SpotFree(new Vector2(pos.X + unit.X, pos.Y)))
-                {
+                if (SpotFree(new Vector2(pos.X + unit.X, pos.Y)))
                     pos.X += unit.X;
-                }
-                else if (SpotFree(new Vector2(pos.X, pos.Y + unit.Y)))
-                {
+
+                if (SpotFree(new Vector2(pos.X, pos.Y + unit.Y)))
                     pos.Y += unit.Y;
-                }
             }
 
             return pos;

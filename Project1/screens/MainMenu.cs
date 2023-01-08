@@ -6,9 +6,6 @@ using MonoGame.Extended;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Project1
 {
